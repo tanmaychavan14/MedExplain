@@ -1,0 +1,4 @@
+VITE_FIREBASE_API_KEY=xxxxxx
+VITE_FIREBASE_AUTH_DOMAIN=xxxxx.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=xxxxx
+VITE_BACKEND_URL=http://localhost:5000

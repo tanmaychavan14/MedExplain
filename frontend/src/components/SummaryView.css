@@ -1,0 +1,60 @@
+.summary-card {
+  margin-top: 2rem;
+  padding: 2rem 2.25rem;
+  max-width: 800px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+  line-height: 1.6;
+  color: #1f2937;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  backdrop-filter: blur(4px);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Headings */
+.summary-card h1,
+.summary-card h2,
+.summary-card h3 {
+  color: #0f172a;
+  margin-top: 1.5rem;
+}
+
+/* Section dividers */
+.summary-card hr {
+  margin: 1.5rem 0;
+  border: none;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Lists */
+.summary-card ul {
+  padding-left: 1.2rem;
+}
+
+.summary-card li {
+  margin-bottom: 0.4rem;
+}
+
+/* Emphasis */
+.summary-card strong {
+  color: #111827;
+}
+
+/* Warning / abnormal emphasis */
+.summary-card em {
+  color: #b91c1c;
+}
+
+/* Paragraph spacing */
+.summary-card p {
+  margin: 0.6rem 0;
+}
+
+@media (max-width: 640px) {
+  .summary-card {
+    padding: 1.5rem 1.25rem;
+    margin-top: 1.5rem;
+  }
+}
