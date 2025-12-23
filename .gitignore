@@ -9,3 +9,4 @@ backend/.DS_Store
 frontend/node_modules/
 backend/serviceAccountKey.json
 frontend/.DS_Store
+backend/storage/uploads

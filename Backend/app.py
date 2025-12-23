@@ -25,16 +25,18 @@ from flask_cors import CORS
 
 import config
 import firebase_admin_init
-
+from routes.report_routes import report_bp
 from routes.auth_routes import auth_bp
 from routes.health_routes import health_bp
 from utils.exception import AppException
-
+from routes.comparison_routes import comparison_bp
 app = Flask(__name__)
 CORS(app)
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(health_bp)
+app.register_blueprint(report_bp)
+app.register_blueprint(comparison_bp)
 
 @app.errorhandler(AppException)
 def handle_app_exception(e):
