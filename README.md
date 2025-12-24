@@ -10,7 +10,6 @@ MedExplain is an open-source platform designed to improve medical information ac
 - Support for multiple document types (PDF, DOCX, images)
 - Clear explanations of medical terms and concepts
 - Per-document chatbot that answers questions using context retrieval from each uploaded PDF
-- RESTful API for programmatic access
 - User-friendly web interface
 - Role-based user authentication and permissions
 - Document history and annotation
