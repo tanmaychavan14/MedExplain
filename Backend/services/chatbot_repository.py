@@ -3,7 +3,7 @@ from firebase_admin import firestore
 from datetime import datetime
 from typing import List, Dict, Optional
 
-def create_chat_session(user_id: str, report_id: str, report_name: str, report_type: str) -> str:
+def create_chat_session(user_id: str, report_id: str, report_name: str, report_type: str, language: str) -> str:
     """
     Create a new chat session for a report.
     
@@ -15,6 +15,7 @@ def create_chat_session(user_id: str, report_id: str, report_name: str, report_t
         "reportId": report_id,
         "reportName": report_name,
         "reportType": report_type,
+        "language": language,  
         "createdAt": datetime.utcnow(),
         "updatedAt": datetime.utcnow(),
         "messages": []

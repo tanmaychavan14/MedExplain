@@ -1,6 +1,6 @@
 import { use, useState } from "react";
 import { uploadReport } from "../services/api";
-
+import "./UploadReport.css";
 export default function UploadReport({ user, onResult, onUploadSuccess }) {
   const [file, setFile] = useState(null);
   const [reportType, setReportType] = useState("");
