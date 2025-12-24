@@ -44,5 +44,8 @@ app.register_blueprint(chatbot_bp)
 def handle_app_exception(e):
     return jsonify(e.to_dict()), e.status_code
 
+# if __name__ == "__main__":
+#     app.run(debug=True)
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
