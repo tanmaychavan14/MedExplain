@@ -16,9 +16,13 @@ def get_report_by_name_and_type(user_id, report_name, report_type):
     if not user_id or not report_name or not report_type:
         return None
 
-    # 🔒 Normalize inputs (MANDATORY)
     report_name = report_name.strip().lower()
     report_type = report_type.strip().upper()
+
+    print("QUERY VALUES:")
+    print("userId:", user_id)
+    print("reportName:", report_name)
+    print("reportType:", report_type)
 
     query = (
         db.collection("reports")
@@ -29,10 +33,15 @@ def get_report_by_name_and_type(user_id, report_name, report_type):
         .stream()
     )
 
-    for doc in query:
-        data = doc.to_dict()
-        data["id"] = doc.id   # 🔥 keep document ID
-        return data
+    docs = list(query)
+    print("FOUND:", len(docs))
 
-    return None
+    if not docs:
+        return None
+
+    doc = docs[0]
+    data = doc.to_dict()
+    data["id"] = doc.id
+    return data
+
 

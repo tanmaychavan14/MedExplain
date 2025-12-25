@@ -13,37 +13,85 @@ export default function Chatbot({ user, reportName, reportType,   onClose }) {
   const [sessionId, setSessionId] = useState(null);
   const [initializing, setInitializing] = useState(true);
   const [language, setLanguage] = useState("en");
-
+const [initError, setInitError] = useState(null); 
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
+const hasInitialized = useRef(false);
+const hasShownError = useRef(false);
 
-  useEffect(() => {
-    initializeSession();
-  }, [reportName, reportType]);
+useEffect(() => {
+  hasInitialized.current = false;
+   setInitError(null);
+}, [reportName, reportType]);
+
+useEffect(() => {
+  if (!reportName || !reportType || !user) return;
+  if (hasInitialized.current) return;
+
+  hasInitialized.current = true;
+  initializeSession();
+}, [reportName, reportType, user]);
+
+
+  // useEffect(() => {
+  //   initializeSession();
+  // }, [reportName, reportType]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
+  // const initializeSession = async () => {
+  //   if (!reportName || !reportType) {
+  //     setInitializing(false);
+  //     return;
+  //   }
+
+  //   try {
+  //     setInitializing(true);
+  //     const session = await createChatSession(reportName, reportType, language,user);
+  //     setSessionId(session.sessionId);
+  //     setMessages(session.messages || []);
+  //   } catch (error) {
+  //     console.error("Failed to initialize chat session:", error);
+  //     alert("Failed to initialize chat. Please try again.");
+  //   } finally {
+  //     setInitializing(false);
+  //   }
+  // };
+
   const initializeSession = async () => {
-    if (!reportName || !reportType) {
-      setInitializing(false);
-      return;
-    }
+  if (!reportName || !reportType) {
+    setInitializing(false);
+    return;
+  }
 
-    try {
-      setInitializing(true);
-      const session = await createChatSession(reportName, reportType, language,user);
-      setSessionId(session.sessionId);
-      setMessages(session.messages || []);
-    } catch (error) {
-      console.error("Failed to initialize chat session:", error);
-      alert("Failed to initialize chat. Please try again.");
-    } finally {
-      setInitializing(false);
+  try {
+    setInitializing(true);
+     setInitError(null);
+    console.log("Creating session for:", { reportName, reportType }); // Debug log
+    
+    const session = await createChatSession(reportName, reportType, language, user);
+    
+    if (!session || !session.sessionId) {
+      throw new Error("Invalid session response");
     }
-  };
+    
+    setSessionId(session.sessionId);
+    setMessages(session.messages || []);
+  } catch (error) {
+    console.error("Failed to initialize chat session:", error);
+    
+  if (!hasShownError.current) {
+    hasShownError.current = true;
+    alert("Please open chat from My Report List");
+  }
 
+    onClose(); // Close the chatbot on error
+  } finally {
+    setInitializing(false);
+  }
+};
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };

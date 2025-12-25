@@ -28,11 +28,20 @@ function App() {
     setChatbotReport(null);
   };
 
-  const handleOpenChatbot = (report) => {
-    setChatbotReport(report);
-    setShowChatbot(true);
-  };
-
+  // const handleOpenChatbot = (report) => {
+  //   setChatbotReport(report);
+  //   setShowChatbot(true);
+  // };
+// In App.jsx
+const handleOpenChatbot = async (report) => {
+  // If report was just uploaded, add a small delay
+  if (!report.id || report.id === 'temp') {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+  
+  setChatbotReport(report);
+  setShowChatbot(true);
+};
   const handleReportSelect = async (report) => {
     setSelectedReport(report);
     try {
@@ -123,10 +132,11 @@ function App() {
                   user={user}
                   onResult={(res) => {
                     setSummary(res.summary);
-                    setSelectedReport({
-                      reportName: res.reportName,
-                      reportType: res.reportType
-                    });
+                    // setSelectedReport({
+                    //   reportName: res.reportName,
+                    //   reportType: res.reportType
+                    // });
+                    setSelectedReport(res);
                   }}
                 />
               </div>
@@ -140,10 +150,11 @@ function App() {
         user={user}
         onResult={(res) => {
           setSummary(res.summary);
-          setSelectedReport({
-            reportName: res.reportName,
-            reportType: res.reportType
-          });
+          // setSelectedReport({
+          //   reportName: res.reportName,
+          //   reportType: res.reportType
+          // });
+          setSelectedReport(res);
         }}
       />
     </div>
