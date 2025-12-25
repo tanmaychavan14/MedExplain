@@ -89,7 +89,7 @@ def send_message():
     data = request.json
     session_id = data.get("sessionId")
     user_message = data.get("message")
-    language = data.get("language", "en")  # 👈 ADD THIS
+    language = data.get("language", "en")  
 
     if not session_id or not user_message:
         return {"error": "sessionId and message required"}, 400
