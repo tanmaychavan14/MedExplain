@@ -42,29 +42,51 @@ from services.comparison_service import compare_reports
 report_bp = Blueprint("reports", __name__, url_prefix="/reports")
 
 # Upload report
+# @report_bp.route("/upload", methods=["POST"])
+# @auth_required
+# def upload_report():
+#     file = request.files.get("file")
+#     report_type = request.form.get("reportType")
+#     language = request.form.get("language", "en")
+
+#     if not file or not report_type:
+#         return {"error": "file and reportType required"}, 400
+
+#     report_id, summary = process_report(
+#         file,
+#         g.user["uid"],
+#         report_type,
+#         language
+#     )
+
+#     return success_response({
+#         "reportId": report_id,
+#         "summary": summary
+#     })
+
+# In your upload route handler
+
 @report_bp.route("/upload", methods=["POST"])
 @auth_required
-def upload_report():
+def upload():
     file = request.files.get("file")
     report_type = request.form.get("reportType")
     language = request.form.get("language", "en")
-
+    
     if not file or not report_type:
-        return {"error": "file and reportType required"}, 400
-
-    report_id, summary = process_report(
-        file,
-        g.user["uid"],
-        report_type,
-        language
-    )
-
+        return {"error": "Missing file or reportType"}, 400
+    
+    report_id, summary = process_report(file, g.user["uid"], report_type, language)
+    
+    # 🔥 IMPORTANT: Return complete report data
     return success_response({
-        "reportId": report_id,
-        "summary": summary
+        "id": report_id,
+        "reportName": file.filename.strip().lower(),  # Match normalization
+        "reportType": report_type.strip().upper(),    # Match normalization
+        "summary": summary,
+        "userId": g.user["uid"],
+        "language": language
     })
-
-
 # Dropdown list
 # @report_bp.route("", methods=["GET"])
 # @auth_required
@@ -100,22 +122,60 @@ def list_reports():
 
 
 # Get summary by report name + type
+# @report_bp.route("/summary", methods=["GET"])
+# @auth_required
+# def get_report_summary():
+#     name = request.args.get("name")
+#     rtype = request.args.get("type")
+
+#     report = get_report_by_name_and_type(g.user["uid"], name, rtype)
+#     if not report:
+#         print("Report not found:", name, rtype)
+#         raise ReportNotFoundError()
+
+#     return success_response({
+#         "reportName": report["reportName"],
+#         "reportType": report["reportType"],
+#         "summary": report["summary"]
+#     })
+
 @report_bp.route("/summary", methods=["GET"])
 @auth_required
 def get_report_summary():
-    name = request.args.get("name")
-    rtype = request.args.get("type")
+    try:
+        name = request.args.get("name")
+        rtype = request.args.get("type")
 
-    report = get_report_by_name_and_type(g.user["uid"], name, rtype)
-    if not report:
-        print("Report not found:", name, rtype)
-        raise ReportNotFoundError()
+        if not name or not rtype:
+            return {
+                "success": False,
+                "error": "name and type are required"
+            }, 400
 
-    return success_response({
-        "reportName": report["reportName"],
-        "reportType": report["reportType"],
-        "summary": report["summary"]
-    })
+        name = name.strip().lower()
+        rtype = rtype.strip().upper()
+
+        report = get_report_by_name_and_type(g.user["uid"], name, rtype)
+
+        if not report:
+            return {
+                "success": False,
+                "error": "Report not found"
+            }, 404
+
+        return success_response({
+            "reportName": report["reportName"],
+            "reportType": report["reportType"],
+            "summary": report["summary"]
+        })
+
+    except Exception as e:
+        print("ERROR in /reports/summary:", e)
+        return {
+            "success": False,
+            "error": str(e)
+        }, 500
+
 
 # @report_bp.route("/compare", methods=["POST"])
 # @auth_required

@@ -68,8 +68,8 @@ def process_report(file, user_id, report_type, language):
 
         report_data = {
             "userId": user_id,
-            "reportType": report_type,
-            "reportName": filename,
+            "reportType": report_type.strip().upper(),     # ✅ normalize
+    "reportName": filename.strip().lower(),
             "summary": summary,
             "sanitizedText": safe_text,
             "language": language

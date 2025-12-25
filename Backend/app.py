@@ -23,8 +23,8 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 import os
-import config
-import firebase_admin_init
+# import config
+# import firebase_admin_init
 from routes.report_routes import report_bp
 from routes.auth_routes import auth_bp
 from routes.health_routes import health_bp
