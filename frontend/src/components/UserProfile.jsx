@@ -9,7 +9,8 @@ export default function UserProfile({ user, onLogout }) {
       onLogout();
     } catch (error) {
       console.error("Error signing out:", error);
-      alert("Failed to sign out. Please try again.");
+      // Even if Firebase signout fails, still logout the user
+      onLogout();
     }
   };
 
@@ -27,6 +28,11 @@ export default function UserProfile({ user, onLogout }) {
     return name.substring(0, 2).toUpperCase();
   };
 
+  // Default profile photo URL using a placeholder service if no photo
+  const defaultPhotoURL = !photoURL 
+    ? `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=10b981&color=fff&size=128`
+    : null;
+
   // Handle image load error - fallback to initials
   const handleImageError = (e) => {
     e.target.style.display = 'none';
@@ -39,10 +45,10 @@ export default function UserProfile({ user, onLogout }) {
   return (
     <div className="user-profile">
       <div className="user-info">
-        {photoURL ? (
+        {(photoURL || defaultPhotoURL) ? (
           <>
             <img 
-              src={photoURL} 
+              src={photoURL || defaultPhotoURL} 
               alt={displayName} 
               className="user-avatar" 
               onError={handleImageError}

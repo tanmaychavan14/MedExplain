@@ -61,37 +61,57 @@ useEffect(() => {
   // };
 
   const initializeSession = async () => {
-  if (!reportName || !reportType) {
-    setInitializing(false);
-    return;
-  }
-
-  try {
-    setInitializing(true);
-     setInitError(null);
-    console.log("Creating session for:", { reportName, reportType }); // Debug log
-    
-    const session = await createChatSession(reportName, reportType, language, user);
-    
-    if (!session || !session.sessionId) {
-      throw new Error("Invalid session response");
+    if (!reportName || !reportType) {
+      setInitializing(false);
+      return;
     }
-    
-    setSessionId(session.sessionId);
-    setMessages(session.messages || []);
-  } catch (error) {
-    console.error("Failed to initialize chat session:", error);
-    
-  if (!hasShownError.current) {
-    hasShownError.current = true;
-    alert("Please open chat from My Report List");
-  }
 
-    onClose(); // Close the chatbot on error
-  } finally {
-    setInitializing(false);
-  }
-};
+    try {
+      setInitializing(true);
+      setInitError(null);
+      console.log("Creating session for:", { reportName, reportType }); // Debug log
+      
+      // Retry logic for newly uploaded reports
+      let session = null;
+      let attempts = 0;
+      const maxAttempts = 5;
+      
+      while (attempts < maxAttempts && !session) {
+        try {
+          session = await createChatSession(reportName, reportType, language, user);
+          if (session && session.sessionId) {
+            break;
+          }
+        } catch (err) {
+          console.log(`Attempt ${attempts + 1} failed, retrying...`);
+          if (attempts < maxAttempts - 1) {
+            // Wait before retrying (exponential backoff)
+            await new Promise(resolve => setTimeout(resolve, 1000 * (attempts + 1)));
+          }
+        }
+        attempts++;
+      }
+      
+      if (!session || !session.sessionId) {
+        // Even if session creation fails, create a placeholder session
+        // The backend should handle this gracefully
+        throw new Error("Unable to create session after retries");
+      }
+      
+      setSessionId(session.sessionId);
+      setMessages(session.messages || []);
+      hasShownError.current = false; // Reset error flag on success
+    } catch (error) {
+      console.error("Failed to initialize chat session:", error);
+      
+      // Don't show error or close - just set a message and allow user to retry
+      setInitError("Chat is initializing. Please wait a moment and try sending a message.");
+      // Don't close the chatbot - let the user try
+      // The backend will handle the session creation when the first message is sent
+    } finally {
+      setInitializing(false);
+    }
+  };
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -99,8 +119,27 @@ useEffect(() => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     
-    if (!inputMessage.trim() || loading || !sessionId) {
+    if (!inputMessage.trim() || loading) {
       return;
+    }
+
+    // If session not initialized yet, try to initialize it first
+    if (!sessionId) {
+      setInitError("Initializing chat session...");
+      try {
+        const session = await createChatSession(reportName, reportType, language, user);
+        if (session && session.sessionId) {
+          setSessionId(session.sessionId);
+          setMessages(session.messages || []);
+          setInitError(null);
+        } else {
+          throw new Error("Failed to create session");
+        }
+      } catch (error) {
+        console.error("Failed to initialize session:", error);
+        setInitError("Failed to initialize chat. Please try again.");
+        return;
+      }
     }
 
     const userMessage = inputMessage.trim();
@@ -115,9 +154,10 @@ useEffect(() => {
     setMessages((prev) => [...prev, newUserMessage]);
 
     setLoading(true);
+    setInitError(null); // Clear any previous errors
 
     try {
-      const response = await sendChatMessage(sessionId, userMessage,language, user);
+      const response = await sendChatMessage(sessionId, userMessage, language, user);
       
       // Add bot response
       const botMessage = {
@@ -128,7 +168,7 @@ useEffect(() => {
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error("Failed to send message:", error);
-      alert("Failed to send message. Please try again.");
+      setInitError("Failed to send message. Please try again.");
       
       // Remove the user message if it failed
       setMessages((prev) => prev.filter((msg, idx) => idx !== prev.length - 1));
@@ -276,20 +316,34 @@ useEffect(() => {
         <div ref={messagesEndRef} />
       </div>
 
+      {initError && (
+        <div style={{ 
+          padding: "0.75rem", 
+          margin: "0.5rem", 
+          backgroundColor: "#fff3cd", 
+          border: "1px solid #ffc107",
+          borderRadius: "8px",
+          color: "#856404",
+          fontSize: "0.9rem"
+        }}>
+          {initError}
+        </div>
+      )}
+      
       <form className="chatbot-input-form" onSubmit={handleSendMessage}>
         <input
           type="text"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="Ask a question about your report..."
+          placeholder={sessionId ? "Ask a question about your report..." : "Initializing chat..."}
           className="chatbot-input"
-          disabled={loading || !sessionId}
+          disabled={loading}
         />
         
         <button
           type="submit"
           className="chatbot-send-btn"
-          disabled={loading || !inputMessage.trim() || !sessionId}
+          disabled={loading || !inputMessage.trim()}
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="22" y1="2" x2="11" y2="13"></line>

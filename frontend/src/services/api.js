@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
 
 
 async function getAuthHeaders(user) {
@@ -6,6 +6,8 @@ async function getAuthHeaders(user) {
     throw new Error("User not authenticated");
   }
   
+  // For normal login users, getIdToken returns the user ID token directly
+  // For Firebase users, it returns the Firebase ID token
   const idToken = await user.getIdToken();
   return {
     "Authorization": `Bearer ${idToken}`,
