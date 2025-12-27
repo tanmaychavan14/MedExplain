@@ -34,9 +34,10 @@ from routes.health_routes import health_bp
 from utils.exception import AppException
 from routes.comparison_routes import comparison_bp
 from routes.chatbot_routes import chatbot_bp
+from routes.voice_chatbot_routes import voice_chatbot_bp
 app = Flask(__name__)
 CORS(app)
-
+app.register_blueprint(voice_chatbot_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(health_bp)
 app.register_blueprint(report_bp)
