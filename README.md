@@ -1,100 +1,147 @@
-# MedExplain
+# MedExplain 🏥✨
 
-## Introduction
+**Medical Reports, Simplified.**
 
-MedExplain is an open-source platform designed to improve medical information accessibility. It empowers users to upload, analyze, and interpret medical documents using advanced AI models. The application aims to bridge the knowledge gap for non-medical users by providing clear, context-aware explanations for complex medical content.
-
-## Features
-
-- AI-powered extraction and summarization of medical documents
-- Support for multiple document types (PDF, DOCX, images)
-- Clear explanations of medical terms and concepts
-- Per-document chatbot that answers questions using context retrieval from each uploaded PDF
-- User-friendly web interface
-- Role-based user authentication and permissions
-- Document history and annotation
-- Export results in various formats (TXT, PDF)
-
-## Requirements
-
-- Python 3.8 or higher
-- pip (Python package manager)
-- Node.js and npm (for frontend development)
-- Firestore database (or compatible NoSQL database)
-- Modern web browser (for UI)
-
-## Installation
-
-Follow these steps to set up MedExplain on your local machine:
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Joshua16vinu/MedExplain.git
-   cd MedExplain
-   ```
-
-2. **Set up the backend:**
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
-
-3. **Configure environment variables:**
-   - Copy `.env.example` to `.env` and fill in the required values (database URL, secret keys, API keys).
-
-
-
-4. **Set up the frontend:**
-   ```bash
-   cd frontend
-   npm install
-   npm run build
-   ```
-
-5. **Start the backend server:**
-   ```bash
-   cd backend
-   venv\scripts\activate
-   python app.py
-   ```
-
-6. **Start the frontend (development mode):**
-   ```bash
-   cd frontend
-   npm run dev
-   ```
-
-## Usage
-
-- **Web Interface:**  
-  Open your browser and navigate to `http://localhost:5173`. Register or log in to start uploading and analyzing medical documents.
-- **API Access:**  
-  Use the API endpoints to programmatically upload documents, retrieve explanations, and manage your data.
-- **Document Upload:**  
-  Drag and drop files into the upload area or use the upload button. Supported formats include PDF, DOCX, and image files.
-- **Explanation Retrieval:**  
-  After processing, the platform displays extracted medical terms and their explanations. Use filtering options to focus on specific sections or terms.
-
-### Chatbot Functionality Per PDF
-
-The application provides a dedicated chatbot for each uploaded PDF, scoped strictly to that document. After upload and processing, the backend splits the PDF into chunks, generates embeddings, and stores them with references. When you ask a question, the system embeds the query, retrieves the most relevant chunks, and builds a context window for the model. The chatbot then answers using only that retrieved context, ensuring responses remain grounded in the selected PDF.
-
-
-## Configuration
-
-MedExplain can be configured using environment variables and config files:
-
-- **Database Settings:**  
-  Set the `DATABASE_URL` in your `.env` file.
-- **Authentication:**  
-  Configure JWT secrets, OAuth credentials, or other auth settings in `.env`.
-- **API Keys:**  
-  Insert keys for any integrated third-party services (e.g., AI model providers).
-- **Frontend URLs:**  
-  Adjust the allowed origins and CORS settings as needed.
-
+MedExplain is an advanced, AI-powered platform designed to bridge the gap between complex medical diagnostics and patient understanding. By leveraging state-of-the-art Large Language Models (LLMs), MedExplain transforms dense medical reports into clear, modular, and visually engaging insights, making healthcare information accessible to everyone.
 
 ---
 
-Thank you for supporting MedExplain. Your contributions help make medical information more accessible to everyone!
+## 🚀 Key Features
+
+### 1. 📄 Smart PDF Report Analysis
+Upload your medical reports (PDF format) and get instant, comprehensive analysis.
+*   **Modular Insight Blocks**: Key findings are categorized (e.g., Blood Health, Liver Function) and visually tagged with status indicators (`Positive`, `Warning`, `Negative`, `Neutral`) for quick scanning.
+*   **Detailed Explanations**: A patient-friendly summary that breaks down:
+    *   What the report is about.
+    *   Key findings in simple language.
+    *   Values within and outside normal ranges.
+    *   General care notes (based strictly on the report).
+*   **Data Visualization**: key numerical metrics are automatically extracted and presented as visual charts, showing your values against standard reference ranges.
+
+### 2. 💬 Context-Aware Medical Chatbot
+Have questions about your specific report?
+*   **Report-Grounded Answers**: The chatbot is "grounded" in the context of your uploaded report. It answers questions *only* based on the provided data, ensuring relevant and safe responses.
+*   **Safety First**: The AI is strictly instructed not to diagnose or prescribe, but rather to explain and clarify findings.
+
+### 3. 🌍 Multi-Language Support
+MedExplain is built for inclusivity.
+*   **Languages**: Fully supports **English**, **Hindi**, and **Marathi**.
+*   **Localized Summaries**: Get the entire analysis and insight cards in your preferred language.
+
+### 4. 🧰 Integrated Medical Tools
+*   **Medical Dictionary**: Instantly search for complex medical terms to get simple, jargon-free definitions.
+*   **Symptom Checker**: Describe your symptoms to get educational insights on possible causes (with strict medical disclaimers).
+
+### 5. 🛡️ Secure & Private
+*   **Privacy Focused**: Reports are processed securely.
+*   **Authentication**: User accounts allow for secure access to personal report history.
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+*   **Framework**: React 19 (Vite)
+*   **Styling**: Tailwind CSS v4 (Modern, responsive design)
+*   **Icons**: Lucide React
+*   **Charts**: Recharts
+*   **Markdown Rendering**: React Markdown
+
+### Backend
+*   **Server**: Flask (Python)
+*   **AI Model**: Google Gemini 1.5 Flash (`gemini-2.5-flash`)
+*   **Database**: Firebase / Firestore (Identity & Data storage)
+*   **PDF Processing**: Custom PDF parsing & chunking
+
+---
+
+## ⚙️ Installation & Setup
+
+Follow these steps to run MedExplain locally.
+
+### Prerequisites
+*   Node.js (v18+)
+*   Python (v3.8+)
+*   Google Gemini API Key
+*   Firebase Project Credentials (`serviceAccountKey.json`)
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Joshua16vinu/MedExplain.git
+cd MedExplain
+```
+
+### 2. Backend Setup
+Navigate to the `Backend` directory and set up the Python environment.
+
+```bash
+cd Backend
+
+# Create a virtual environment
+python -m venv venv
+
+# Activate the virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+**Configuration:**
+1.  Create a `.env` file in the `Backend` directory.
+2.  Add your API Key:
+    ```env
+    GEMINI_API_KEY=your_google_gemini_api_key
+    PORT=8080
+    ```
+3.  Place your Firebase `serviceAccountKey.json` file inside the `Backend/` directory.
+
+**Start the Server:**
+```bash
+python app.py
+```
+The backend will run on `http://localhost:8080`.
+
+### 3. Frontend Setup
+Open a new terminal and navigate to the `frontend` directory.
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+The application will launch in your browser at `http://localhost:5173`.
+
+---
+
+## 📖 Usage Guide
+
+1.  **Login/Register**: Create an account to save your report history.
+2.  **Upload**:
+    *   Go to the "Upload Report" tab.
+    *   Select your report type (CBC, Lipid Profile, Thyroid, etc.).
+    *   Choose your simplified language (English, Hindi, Marathi).
+    *   Drag & drop your PDF file.
+3.  **View Analysis**:
+    *   Wait a few seconds for the "Smart Analysis".
+    *   Review the **Insight Cards** for a quick health snapshot.
+    *   Read the **Detailed Summary** for in-depth understanding.
+4.  **Ask the Chatbot**:
+    *   Click "Chat with Report" (if available) or use the chat interface.
+    *   Ask questions like "Is my hemoglobin low?" or "What does High Neutrophils mean?".
+
+---
+
+## ⚠️ Disclaimer
+
+**MedExplain is an educational tool.**
+It uses Artificial Intelligence to explain medical data but **does NOT provide medical diagnoses**.
+*   Always consult a qualified doctor for medical advice.
+*   Do not make health decisions solely based on this application's output.
