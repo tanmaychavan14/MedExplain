@@ -1,4 +1,4 @@
-# MedExplain 🏥✨
+# MedExplain
 
 **Medical Reports, Simplified.**
 
@@ -6,9 +6,9 @@ MedExplain is an advanced, AI-powered platform designed to bridge the gap betwee
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
-### 1. 📄 Smart PDF Report Analysis
+### 1.  Smart PDF Report Analysis
 Upload your medical reports (PDF format) and get instant, comprehensive analysis.
 *   **Modular Insight Blocks**: Key findings are categorized (e.g., Blood Health, Liver Function) and visually tagged with status indicators (`Positive`, `Warning`, `Negative`, `Neutral`) for quick scanning.
 *   **Detailed Explanations**: A patient-friendly summary that breaks down:
@@ -18,21 +18,21 @@ Upload your medical reports (PDF format) and get instant, comprehensive analysis
     *   General care notes (based strictly on the report).
 *   **Data Visualization**: key numerical metrics are automatically extracted and presented as visual charts, showing your values against standard reference ranges.
 
-### 2. 💬 Context-Aware Medical Chatbot
+### 2.  Context-Aware Medical Chatbot
 Have questions about your specific report?
 *   **Report-Grounded Answers**: The chatbot is "grounded" in the context of your uploaded report. It answers questions *only* based on the provided data, ensuring relevant and safe responses.
 *   **Safety First**: The AI is strictly instructed not to diagnose or prescribe, but rather to explain and clarify findings.
 
-### 3. 🌍 Multi-Language Support
+### 3.  Multi-Language Support
 MedExplain is built for inclusivity.
 *   **Languages**: Fully supports **English**, **Hindi**, and **Marathi**.
 *   **Localized Summaries**: Get the entire analysis and insight cards in your preferred language.
 
-### 4. 🧰 Integrated Medical Tools
+### 4.  Integrated Medical Tools
 *   **Medical Dictionary**: Instantly search for complex medical terms to get simple, jargon-free definitions.
 *   **Symptom Checker**: Describe your symptoms to get educational insights on possible causes (with strict medical disclaimers).
 
-### 5. 🛡️ Secure & Private
+### 5. Secure & Private
 *   **Privacy Focused**: Reports are processed securely.
 *   **Authentication**: User accounts allow for secure access to personal report history.
 
@@ -121,7 +121,7 @@ The application will launch in your browser at `http://localhost:5173`.
 
 ---
 
-## 📖 Usage Guide
+##  Usage Guide
 
 1.  **Login/Register**: Create an account to save your report history.
 2.  **Upload**:
@@ -139,7 +139,7 @@ The application will launch in your browser at `http://localhost:5173`.
 
 ---
 
-## ⚠️ Disclaimer
+##  Disclaimer
 
 **MedExplain is an educational tool.**
 It uses Artificial Intelligence to explain medical data but **does NOT provide medical diagnoses**.
