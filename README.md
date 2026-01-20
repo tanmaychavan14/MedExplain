@@ -38,7 +38,7 @@ MedExplain is built for inclusivity.
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Frontend
 *   **Framework**: React 19 (Vite)
@@ -55,7 +55,7 @@ MedExplain is built for inclusivity.
 
 ---
 
-## ⚙️ Installation & Setup
+##  Installation & Setup
 
 Follow these steps to run MedExplain locally.
 
