@@ -9,7 +9,7 @@ function NavigationTabs({ activeView, onTabChange }) {
   ];
 
   return (
-    <div className="bg-white border-b border-slate-200">
+    <div className="bg-white border-b border-[var(--color-surface-200)] sticky top-16 z-40 shadow-sm/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex space-x-8 overflow-x-auto scroller-hide">
           {tabs.map((tab) => {
@@ -21,13 +21,13 @@ function NavigationTabs({ activeView, onTabChange }) {
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
                 className={`
-                  group inline-flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-all duration-200
+                  group inline-flex items-center gap-2 py-4 px-1 border-b-[2.5px] font-semibold text-sm transition-all duration-200
                   ${isActive
-                    ? "border-sky-500 text-sky-600"
-                    : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"}
+                    ? "border-[var(--color-primary)] text-[var(--color-primary)]"
+                    : "border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-surface-300)]"}
                 `}
               >
-                <Icon className={`w-4 h-4 ${isActive ? "text-sky-500" : "text-slate-400 group-hover:text-slate-500"}`} />
+                <Icon className={`w-4 h-4 ${isActive ? "text-[var(--color-primary)]" : "text-[var(--color-text-tertiary)] group-hover:text-[var(--color-text-secondary)]"}`} />
                 {tab.label}
               </button>
             );

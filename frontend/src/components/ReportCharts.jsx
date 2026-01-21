@@ -108,7 +108,7 @@ export default function ReportCharts({ visualizations }) {
 
             {/* Header */}
             <div className="flex items-center gap-2">
-                <Activity className="w-5 h-5 text-indigo-600" />
+                <Activity className="w-5 h-5 text-teal-600" />
                 <h3 className="text-lg font-bold text-slate-800">Visual Analysis</h3>
             </div>
 

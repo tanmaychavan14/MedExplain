@@ -10,6 +10,7 @@ import UserProfile from "./components/UserProfile";
 import Chatbot from "./components/Chatbot";
 import Header from "./components/Header";
 import NavigationTabs from "./components/NavigationTabs";
+import Footer from "./components/Footer";
 
 function App() {
   // User state
@@ -80,14 +81,14 @@ function App() {
   const renderUploadView = () => {
     if (!summary) {
       return (
-        <div className="flex justify-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
           <UploadReport user={user} onResult={handleUploadResult} summary={summary} />
         </div>
       );
     }
 
     return (
-      <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[600px] items-start">
+      <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[600px] items-start animate-fade-in">
         {/* Upload/List Section */}
         <div className="w-full order-1">
           <UploadReport user={user} onResult={handleUploadResult} summary={summary} />
@@ -106,7 +107,7 @@ function App() {
   };
 
   const renderListView = () => (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-140px)] min-h-[600px]">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-140px)] min-h-[600px] animate-fade-in">
       <div className="lg:col-span-4 overflow-y-auto pr-2 custom-scrollbar">
         <ReportList
           user={user}
@@ -122,12 +123,12 @@ function App() {
             onOpenChatbot={handleOpenChatbot}
           />
         ) : (
-          <div className="flex flex-col items-center justify-center h-full p-12 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50">
-            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-              <span className="text-3xl">📋</span>
+          <div className="flex flex-col items-center justify-center h-full p-12 text-center border-2 border-dashed border-[var(--color-surface-200)] rounded-2xl bg-[var(--color-surface-50)]">
+            <div className="w-16 h-16 bg-[var(--color-surface-100)] rounded-full flex items-center justify-center mb-4 text-3xl shadow-sm">
+              📋
             </div>
-            <h3 className="text-lg font-semibold text-slate-800">No Report Selected</h3>
-            <p className="text-slate-500 mt-1 max-w-sm">Select a report from the list on the left to view its detailed AI summary and analysis.</p>
+            <h3 className="text-lg font-bold text-[var(--color-text-primary)]">No Report Selected</h3>
+            <p className="text-[var(--color-text-tertiary)] mt-1 max-w-sm font-medium">Select a report from the list on the left to view its detailed AI summary and analysis.</p>
           </div>
         )}
       </div>
@@ -142,7 +143,7 @@ function App() {
         return renderListView();
       case "compare":
         return (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
             <CompareReports user={user} />
           </div>
         );
@@ -153,7 +154,7 @@ function App() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col">
+      <div className="min-h-screen bg-[var(--color-surface-50)] flex flex-col font-sans text-[var(--color-text-primary)]">
         <Header />
         <div className="flex-1 flex flex-col justify-center items-center p-4">
           <Login onLogin={setUser} />
@@ -163,12 +164,12 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div className="min-h-screen bg-[var(--color-surface-50)] flex flex-col font-sans text-[var(--color-text-primary)]">
       <Header user={user} onLogout={handleLogout} />
 
       <NavigationTabs activeView={activeView} onTabChange={handleTabChange} />
 
-      <div className="flex-1 w-full bg-slate-50">
+      <div className="flex-1 w-full relative z-0">
         {renderActiveView()}
       </div>
 
@@ -180,6 +181,8 @@ function App() {
           onClose={handleCloseChatbot}
         />
       )}
+
+      <Footer />
     </div>
   );
 }

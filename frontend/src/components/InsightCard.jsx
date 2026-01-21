@@ -24,7 +24,7 @@ export default function InsightCard({ category, insight, status = "neutral", emo
             bg: "bg-slate-50",
             border: "border-slate-100",
             text: "text-slate-800",
-            icon: <Info className="w-5 h-5 text-sky-600" />
+            icon: <Info className="w-5 h-5 text-teal-600" />
         }
     };
 

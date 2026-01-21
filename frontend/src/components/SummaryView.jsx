@@ -57,7 +57,7 @@ export default function SummaryView({ summary, report, onOpenChatbot }) {
 
           {report && onOpenChatbot && (
             <button
-              className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl shadow-md hover:shadow-lg hover:from-violet-500 hover:to-indigo-500 transition-all duration-200"
+              className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl shadow-md hover:shadow-lg hover:from-teal-500 hover:to-cyan-500 transition-all duration-200"
               onClick={() => onOpenChatbot(report)}
               title="Ask AI Assistant about this report"
             >
@@ -103,7 +103,7 @@ export default function SummaryView({ summary, report, onOpenChatbot }) {
             </div>
           ) : (
             /* Legacy Markdown View */
-            <div className="prose prose-slate max-w-none prose-headings:font-bold prose-headings:text-slate-800 prose-p:text-slate-600 prose-li:text-slate-600 prose-strong:text-slate-900 prose-strong:font-bold prose-a:text-sky-600 hover:prose-a:text-sky-500">
+            <div className="prose prose-slate max-w-none prose-headings:font-bold prose-headings:text-slate-800 prose-p:text-slate-600 prose-li:text-slate-600 prose-strong:text-slate-900 prose-strong:font-bold prose-a:text-teal-600 hover:prose-a:text-teal-500">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{summary}</ReactMarkdown>
             </div>
           )}

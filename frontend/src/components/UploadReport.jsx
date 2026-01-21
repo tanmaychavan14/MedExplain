@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { uploadReport } from "../services/api";
+import { useState, useEffect, useRef } from "react";
+import { uploadReport, explainMedicalTerm, checkSymptoms, identifyMedicine } from "../services/api";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
@@ -14,14 +14,45 @@ import {
   BookOpen,
   Stethoscope,
   Quote,
-  Star
+  Star,
+  Sparkles,
+  BrainCircuit,
+  ShieldCheck,
+  Languages,
+  MessageCircle,
+  Phone,
+  Pill,
+  Zap
 } from "lucide-react";
 
 // Animated Counter Component
+// Animated Counter Component with Intersection Observer
 function AnimatedCounter({ end, duration = 2000 }) {
   const [count, setCount] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+  const counterRef = useState(null); // Ref for the element
 
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasStarted) {
+          setHasStarted(true);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    const currentRef = document.getElementById(`counter-${end}`);
+    if (currentRef) observer.observe(currentRef);
+
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, [end, hasStarted]);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+
     let startTime;
     let animationFrame;
 
@@ -29,8 +60,6 @@ function AnimatedCounter({ end, duration = 2000 }) {
       if (!startTime) startTime = timestamp;
       const progress = timestamp - startTime;
       const percentage = Math.min(progress / duration, 1);
-
-      // Easing function (easeOutExpo)
       const ease = (x) => (x === 1 ? 1 : 1 - Math.pow(2, -10 * x));
 
       setCount(Math.floor(end * ease(percentage)));
@@ -41,11 +70,10 @@ function AnimatedCounter({ end, duration = 2000 }) {
     };
 
     animationFrame = requestAnimationFrame(animate);
-
     return () => cancelAnimationFrame(animationFrame);
-  }, [end, duration]);
+  }, [hasStarted, end, duration]);
 
-  return <>{count}</>;
+  return <span id={`counter-${end}`}>{count}</span>;
 }
 
 // Testimonials Data
@@ -91,12 +119,49 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
 
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
+  // Medicine Decoder state
+  const [medicineName, setMedicineName] = useState("");
+  const [medicineInfo, setMedicineInfo] = useState(null);
+  const [medicineLoading, setMedicineLoading] = useState(false);
+  const [medicineError, setMedicineError] = useState(null);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  async function handleIdentifyMedicine() {
+    if (!medicineName.trim()) return;
+    setMedicineLoading(true);
+    setMedicineInfo(null);
+    setMedicineError(null);
+    try {
+      const resultJson = await identifyMedicine(medicineName, language, user);
+      // Clean and parse JSON
+      let cleanJson = resultJson;
+      if (typeof cleanJson === 'object') {
+        // If already an object (axios/fetch sometimes parses), use it
+        setMedicineInfo(cleanJson);
+      } else if (typeof cleanJson === 'string') {
+        if (cleanJson.startsWith("```json")) cleanJson = cleanJson.slice(7);
+        if (cleanJson.startsWith("```")) cleanJson = cleanJson.slice(3);
+        if (cleanJson.endsWith("```")) cleanJson = cleanJson.slice(0, -3);
+        try {
+          setMedicineInfo(JSON.parse(cleanJson));
+        } catch (e) {
+          console.error("JSON parse error", e);
+          setMedicineInfo({ purpose: "Could not parse info", best_time: "-", side_effects: "-" });
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setMedicineError(err.message || "Failed to identify. Please try again.");
+    } finally {
+      setMedicineLoading(false);
+    }
+  }
 
   async function handleUpload() {
     if (!file || !user) {
@@ -169,26 +234,26 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
 
 
   return (
-    <div className={`grid gap-8 w-full ${!isSummaryActive ? 'lg:grid-cols-12' : 'grid-cols-1'}`}>
+    <div className={`grid gap-8 w-full ${!isSummaryActive ? 'lg:grid-cols-12' : 'grid-cols-1'} animate-in fade-in duration-500`}>
 
       {/* LEFT COLUMN (Upload & Tools) - Spans 8 cols */}
       <div className={`${!isSummaryActive ? 'lg:col-span-8' : 'w-full'} space-y-8`}>
-
         {/* 1. UPLOAD REPORT SECTION */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden relative group">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 to-blue-600"></div>
+        {/* 1. UPLOAD REPORT SECTION */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden relative group transition-colors duration-300">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-500 to-cyan-600"></div>
           <div className="p-8">
             <div className="flex items-start justify-between mb-8">
               <div>
                 <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                  <FileText className="w-6 h-6 text-sky-600" />
+                  <FileText className="w-6 h-6 text-teal-600" />
                   Upload Medical Report
                 </h2>
                 <p className="text-slate-500 mt-2 text-lg">
                   Understand your medical report in seconds.
                 </p>
               </div>
-              <div className="hidden sm:block px-3 py-1 bg-sky-50 text-sky-700 text-xs font-bold uppercase tracking-wider rounded-full">
+              <div className="hidden sm:block px-3 py-1 bg-teal-50 text-teal-700 text-xs font-bold uppercase tracking-wider rounded-full">
                 Smart Analysis
               </div>
             </div>
@@ -217,14 +282,14 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
                   border-2 border-dashed rounded-2xl p-10 text-center transition-all duration-300 transform
                   flex flex-col items-center gap-4 bg-gradient-to-b from-slate-50/50 to-white
                   ${file
-                    ? "border-sky-500 bg-sky-50/50 ring-4 ring-sky-500/10 scale-[1.01]"
-                    : "border-slate-300 hover:border-sky-400 hover:bg-sky-50/30 hover:scale-[1.01]"}
+                    ? "border-teal-500 bg-teal-50/50 ring-4 ring-teal-500/10 scale-[1.01]"
+                    : "border-slate-300 hover:border-teal-400 hover:bg-teal-50/30 hover:scale-[1.01]"}
                 `}>
                   <div className={`
                     p-5 rounded-full shadow-sm transition-all duration-300
                     ${file
-                      ? "bg-sky-100 text-sky-600"
-                      : "bg-white text-slate-400 group-hover:text-sky-500 group-hover:shadow-md"}
+                      ? "bg-teal-100 text-teal-600"
+                      : "bg-white text-slate-400 group-hover:text-teal-500 group-hover:shadow-md"}
                   `}>
                     <UploadCloud className="w-10 h-10" />
                   </div>
@@ -246,7 +311,7 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
                     <select
                       value={reportType}
                       onChange={(e) => setReportType(e.target.value)}
-                      className="w-full p-3 pl-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 outline-none transition-all appearance-none cursor-pointer hover:border-sky-300"
+                      className="w-full p-3 pl-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all appearance-none cursor-pointer hover:border-teal-300"
                     >
                       <option value="">Select type...</option>
                       <option value="CBC">🩸 Complete Blood Count</option>
@@ -269,7 +334,7 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
                     <select
                       value={language}
                       onChange={(e) => setLanguage(e.target.value)}
-                      className="w-full p-3 pl-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 outline-none transition-all appearance-none cursor-pointer hover:border-sky-300"
+                      className="w-full p-3 pl-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all appearance-none cursor-pointer hover:border-teal-300"
                     >
                       <option value="en">🇬🇧 English</option>
                       <option value="hi">🇮🇳 Hindi</option>
@@ -285,7 +350,7 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
               <button
                 onClick={handleUpload}
                 disabled={loading || !file || !reportType}
-                className="w-full flex items-center justify-center gap-3 py-4 px-6 bg-gradient-to-r from-sky-600 to-blue-600 text-white rounded-xl font-bold shadow-lg shadow-sky-600/20 hover:from-sky-500 hover:to-blue-500 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                className="w-full flex items-center justify-center gap-3 py-4 px-6 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl font-bold shadow-lg shadow-teal-600/20 hover:from-teal-500 hover:to-cyan-500 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
               >
                 {loading ? (
                   <>
@@ -303,23 +368,22 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
           </div>
         </div>
 
-        {/* 2 & 3. TOOLS GRID */}
+        {/* 2. TOOLS GRID (2 Columns) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Medical Terms */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+          {/* Card: Medical Terms */}
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
             <div className="p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg">
+                <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg shrink-0">
                   <BookOpen className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-800">Medical Dictionary</h3>
               </div>
-
               <div className="space-y-4">
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Search term (e.g. Hemoglobin)"
+                    placeholder="Search (e.g. Hemoglobin)"
                     value={medicalTerm}
                     onChange={(e) => setMedicalTerm(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleMedicalTermSearch()}
@@ -333,7 +397,6 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
                     {termLoading ? <Loader className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
                   </button>
                 </div>
-
                 {termDefinition ? (
                   <div className="p-4 bg-emerald-50/50 border border-emerald-100 rounded-xl text-sm animate-in fade-in zoom-in-95">
                     <p className="font-semibold text-emerald-800 mb-1">{medicalTerm}:</p>
@@ -342,7 +405,7 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
                     </div>
                   </div>
                 ) : (
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 mt-2">
                     Instantly understand complex medical terms found in your reports.
                   </p>
                 )}
@@ -350,16 +413,15 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
             </div>
           </div>
 
-          {/* Symptom Checker */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+          {/* Card: Symptom Checker */}
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
             <div className="p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2.5 bg-rose-50 text-rose-600 rounded-lg">
+                <div className="p-2.5 bg-rose-50 text-rose-600 rounded-lg shrink-0">
                   <Stethoscope className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-800">Symptom Checker</h3>
               </div>
-
               <div className="space-y-4">
                 <textarea
                   placeholder="Describe symptoms..."
@@ -368,7 +430,6 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
                   className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all text-sm min-h-[50px] resize-none"
                   rows="2"
                 />
-
                 <button
                   onClick={handleSymptomCheck}
                   disabled={symptomLoading || !symptoms.trim()}
@@ -376,9 +437,8 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
                 >
                   {symptomLoading ? "Checking..." : "Analyze Symptoms"}
                 </button>
-
                 {diagnosis && (
-                  <div className="p-4 bg-white border border-slate-200 rounded-xl text-sm animate-in fade-in zoom-in-95 shadow-sm">
+                  <div className="p-4 bg-white border border-slate-200 rounded-xl text-sm animate-in fade-in zoom-in-95 shadow-sm mt-auto">
                     <p className="font-semibold text-slate-800 mb-1 flex items-center gap-1.5">
                       <Activity className="w-3.5 h-3.5 text-rose-500" />
                       Possible Causes:
@@ -391,144 +451,267 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
               </div>
             </div>
           </div>
+
+          {/* Card: Medicine Decoder - Spans 2 Cols */}
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col h-full hover:shadow-md transition-shadow overflow-hidden md:col-span-2">
+            <div className="p-5 border-b border-slate-100 bg-teal-50/50">
+              <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                <div className="p-2 bg-white rounded-lg shadow-sm text-teal-600">
+                  <Pill className="w-5 h-5" />
+                </div>
+                Medicine Decoder
+              </h3>
+            </div>
+            <div className="p-5 flex flex-col flex-1">
+              <div className="flex gap-4 items-start flex-col md:flex-row">
+                <div className="w-full md:w-auto md:flex-1">
+                  <input
+                    type="text"
+                    placeholder="Enter medicine name (e.g., 'Dolo 650')"
+                    value={medicineName}
+                    onChange={(e) => setMedicineName(e.target.value)}
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all placeholder:text-slate-400 text-sm"
+                    onKeyDown={(e) => e.key === 'Enter' && handleIdentifyMedicine()}
+                  />
+                  {medicineError && (
+                    <p className="text-xs text-red-500 mt-2 font-medium">{medicineError}</p>
+                  )}
+                </div>
+                <button
+                  onClick={handleIdentifyMedicine}
+                  disabled={medicineLoading || !medicineName.trim()}
+                  className="w-full md:w-auto py-3 px-6 bg-teal-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-teal-500/20 hover:bg-teal-500 transition-all disabled:opacity-50 whitespace-nowrap"
+                >
+                  {medicineLoading ? "Decoding..." : "Identify Medicine"}
+                </button>
+              </div>
+
+              {medicineInfo && (
+                <div className="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3 animate-in fade-in slide-in-from-top-2">
+                  {medicineInfo.name_confirmed && (
+                    <div className="text-xs font-bold text-slate-500 uppercase tracking-wide border-b border-slate-200 pb-2 mb-2">
+                      {medicineInfo.name_confirmed}
+                    </div>
+                  )}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
+                    <div>
+                      <span className="block font-semibold text-slate-700 mb-1">Purpose</span>
+                      <span className="text-slate-600 block bg-white p-2 rounded-lg border border-slate-200">{medicineInfo.purpose}</span>
+                    </div>
+                    <div>
+                      <span className="block font-semibold text-slate-700 mb-1">Best Time</span>
+                      <span className="text-slate-600 block bg-white p-2 rounded-lg border border-slate-200">{medicineInfo.best_time}</span>
+                    </div>
+                    <div>
+                      <span className="block font-semibold text-slate-700 mb-1">Caution</span>
+                      <span className="text-slate-600 block bg-white p-2 rounded-lg border border-slate-200">{medicineInfo.side_effects}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-auto pt-4">
+                <div className="text-xs text-slate-400 flex items-start gap-2 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5 text-slate-500" />
+                  <p className="leading-relaxed">Consult your doctor before taking any medication. This tool is for informational purposes only.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
 
 
       {/* RIGHT COLUMN (Stats, Features, Testimonials) - Spans 4 cols */}
-      {!isSummaryActive && (
-        <div className="lg:col-span-4 space-y-6">
+      {
+        !isSummaryActive && (
+          <div className="lg:col-span-4 space-y-6 flex flex-col h-full">
 
-          {/* 1. Stats Grid - Animated */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="group bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center text-center hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-              <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-blue-600 flex items-baseline gap-0.5">
-                <AnimatedCounter end={10} duration={2000} />
-                <span>k+</span>
+            {/* 1. Stats Grid - NOW AT TOP for Clarity */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="group bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center text-center hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600 flex items-baseline gap-0.5">
+                  <AnimatedCounter end={10} duration={2000} />
+                  <span>k+</span>
+                </div>
+                <div className="text-xs font-bold text-slate-400 uppercase tracking-wide mt-1 group-hover:text-blue-500 transition-colors">Reports</div>
               </div>
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-wide mt-1 group-hover:text-blue-500 transition-colors">Reports Analyzed</div>
-            </div>
-            <div className="group bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center text-center hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-              <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500 flex items-baseline gap-0.5">
-                <AnimatedCounter end={98} duration={2000} />
-                <span>%</span>
+              <div className="group bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center text-center hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500 flex items-baseline gap-0.5">
+                  <AnimatedCounter end={98} duration={2000} />
+                  <span>%</span>
+                </div>
+                <div className="text-xs font-bold text-slate-400 uppercase tracking-wide mt-1 group-hover:text-emerald-500 transition-colors">Happy Users</div>
               </div>
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-wide mt-1 group-hover:text-emerald-500 transition-colors">User Satisfaction</div>
             </div>
-          </div>
 
-          {/* 2. Why Choose MedExplain - Enhanced (Already done, keeping context) */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-            <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
-              <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
-              Why MedExplain?
-            </h3>
-            <ul className="space-y-4">
-              {[
-                {
-                  icon: "⚡",
-                  title: "Instant Results",
-                  desc: "Analysis in seconds",
-                  color: "bg-amber-100 text-amber-600"
-                },
-                {
-                  icon: "🔒",
-                  title: "Private & Secure",
-                  desc: "Bank-level encryption",
-                  color: "bg-emerald-100 text-emerald-600"
-                },
-                {
-                  icon: "🌍",
-                  title: "Multi-Language",
-                  desc: "English, Hindi, Marathi",
-                  color: "bg-blue-100 text-blue-600"
-                }
-              ].map((item, i) => (
-                <li
-                  key={i}
-                  className="group flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 transition-all duration-300 hover:shadow-md border border-transparent hover:border-slate-100 hover:-translate-y-1"
-                >
-                  <div className={`w-12 h-12 rounded-2xl ${item.color} flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition-transform duration-300`}>
-                    {item.icon}
+            {/* 2. Why Choose MedExplain - Features (Premium Enhanced) */}
+            <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 overflow-hidden ring-1 ring-slate-900/5 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] group/card relative">
+
+              {/* Decorative Gradient Line */}
+              <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500 opacity-80"></div>
+
+              <div className="p-6 border-b border-slate-100/60 bg-white/40 relative">
+                <h3 className="text-lg font-extrabold text-slate-800 flex items-center gap-2">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-cyan-600 drop-shadow-sm tracking-tight">
+                    Why MedExplain?
+                  </span>
+                </h3>
+              </div>
+
+              <div className="divide-y divide-slate-100/60">
+                {[
+                  {
+                    title: "Instant Clarity",
+                    desc: "Understand complex reports in seconds.",
+                    icon: Zap,
+                    color: "text-amber-500",
+                    bg: "bg-amber-50",
+                    border: "group-hover:border-amber-400/50",
+                    shadow: "shadow-amber-500/20"
+                  },
+                  {
+                    title: "100% Private",
+                    desc: "Your health data never leaves your device.",
+                    icon: ShieldCheck,
+                    color: "text-emerald-500",
+                    bg: "bg-emerald-50",
+                    border: "group-hover:border-emerald-400/50",
+                    shadow: "shadow-emerald-500/20"
+                  },
+                  {
+                    title: "Smart Insights",
+                    desc: "AI-powered analysis you can trust.",
+                    icon: BrainCircuit,
+                    color: "text-indigo-500",
+                    bg: "bg-indigo-50",
+                    border: "group-hover:border-indigo-400/50",
+                    shadow: "shadow-indigo-500/20"
+                  }
+                ].map((item, i) => (
+                  <div key={i}
+                    className={`group p-5 flex items-center gap-4 hover:bg-white/90 transition-all duration-500 ease-out cursor-default border-l-[3px] border-transparent ${item.border} relative overflow-hidden`}
+                    style={{ animationDelay: `${i * 150}ms` }}
+                  >
+                    <div className={`w-12 h-12 rounded-2xl ${item.bg} ${item.color} flex items-center justify-center shadow-lg ${item.shadow} group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 ring-4 ring-white relative z-10`}>
+                      <item.icon className="w-6 h-6 group-hover:animate-pulse" />
+                    </div>
+                    <div className="relative z-10">
+                      <h4 className="font-bold text-slate-800 text-sm group-hover:text-teal-700 transition-colors duration-300">{item.title}</h4>
+                      <p className="text-xs text-slate-500 font-medium mt-0.5 leading-relaxed group-hover:text-slate-600 transition-colors duration-300">{item.desc}</p>
+                    </div>
+                    {/* Subtle Background Glow on Hover */}
+                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transform`}></div>
                   </div>
-                  <div>
-                    <p className="font-bold text-slate-700 text-sm group-hover:text-slate-900 transition-colors">
-                      {item.title}
-                    </p>
-                    <p className="text-xs text-slate-500 group-hover:text-slate-600 transition-colors">
-                      {item.desc}
-                    </p>
+                ))}
+              </div>
+            </div>
+
+            {/* 3. Quick BMI Calculator (Functional Widget) */}
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
+              <div className="p-5 border-b border-slate-100 bg-teal-50/50">
+                <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                  <Activity className="w-5 h-5 text-teal-600" />
+                  Quick BMI Check
+                </h3>
+              </div>
+              <div className="p-5 space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Weight (kg)</label>
+                    <input
+                      type="number"
+                      placeholder="e.g. 70"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all text-sm font-medium"
+                      onChange={(e) => {
+                        const w = parseFloat(e.target.value);
+                        const h = parseFloat(document.getElementById('bmi-height').value);
+                        const resultEl = document.getElementById('bmi-result');
+                        if (w && h) {
+                          const bmi = (w / ((h / 100) * (h / 100))).toFixed(1);
+                          let category = "";
+                          let color = "";
+                          if (bmi < 18.5) { category = "Underweight"; color = "text-blue-500"; }
+                          else if (bmi < 25) { category = "Normal"; color = "text-emerald-500"; }
+                          else if (bmi < 30) { category = "Overweight"; color = "text-orange-500"; }
+                          else { category = "Obese"; color = "text-red-500"; }
+
+                          resultEl.innerHTML = `
+                            <div class="text-3xl font-bold ${color}">${bmi}</div>
+                            <div class="text-xs font-bold text-slate-400 uppercase tracking-wide mt-1">${category}</div>
+                          `;
+                        } else {
+                          resultEl.innerHTML = '<div class="text-sm text-slate-400">Enter details</div>';
+                        }
+                      }}
+                    />
                   </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Height (cm)</label>
+                    <input
+                      id="bmi-height"
+                      type="number"
+                      placeholder="e.g. 175"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all text-sm font-medium"
+                      onChange={(e) => {
+                        const h = parseFloat(e.target.value);
+                        const w = parseFloat(document.querySelector('input[placeholder="e.g. 70"]').value);
+                        const resultEl = document.getElementById('bmi-result');
+                        if (w && h) {
+                          const bmi = (w / ((h / 100) * (h / 100))).toFixed(1);
+                          let category = "";
+                          let color = "";
+                          if (bmi < 18.5) { category = "Underweight"; color = "text-blue-500"; }
+                          else if (bmi < 25) { category = "Normal"; color = "text-emerald-500"; }
+                          else if (bmi < 30) { category = "Overweight"; color = "text-orange-500"; }
+                          else { category = "Obese"; color = "text-red-500"; }
 
-          {/* 3. Dynamic Testimonials - Clean Theme Aligned Design */}
-          <div className="bg-gradient-to-br from-sky-500 to-blue-600 rounded-3xl shadow-xl p-8 relative overflow-hidden group hover:shadow-2xl transition-all duration-500 ring-1 ring-white/20">
-            {/* Animated Background Elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:translate-x-1/3 transition-transform duration-700"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-sky-400/30 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4 group-hover:-translate-x-1/5 transition-transform duration-700"></div>
-            <Quote className="absolute top-6 right-6 w-24 h-24 text-white/5 rotate-12 group-hover:rotate-6 transition-transform duration-500" />
+                          resultEl.innerHTML = `
+                            <div class="text-3xl font-bold ${color}">${bmi}</div>
+                            <div class="text-xs font-bold text-slate-400 uppercase tracking-wide mt-1">${category}</div>
+                          `;
+                        } else {
+                          resultEl.innerHTML = '<div class="text-sm text-slate-400">Enter details</div>';
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
 
-            <div className="relative z-10 flex flex-col h-full">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold text-white border border-white/10 uppercase tracking-wider shadow-sm">
-                  Community Stories
+                <div className="pt-2">
+                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 text-center min-h-[80px] flex flex-col items-center justify-center transition-all" id="bmi-result">
+                    <div className="text-sm text-slate-400 font-medium">Enter your height & weight</div>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              <div className="relative flex-1 min-h-[220px]">
-                {testimonials.map((t, idx) => (
-                  <div
-                    key={idx}
-                    className={`absolute inset-0 transition-all duration-700 ease-out transform flex flex-col justify-between
-                      ${idx === activeTestimonial
-                        ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
-                        : "opacity-0 translate-y-4 scale-95 pointer-events-none"
-                      }`}
-                  >
-                    <div className="space-y-6">
-                      <div className="flex gap-1">
-                        {[1, 2, 3, 4, 5].map(s => <Star key={s} className="w-4 h-4 text-amber-300 fill-amber-300 drop-shadow-sm" />)}
-                      </div>
-
-                      <p className="text-white text-lg font-medium leading-relaxed font-sans tracking-wide drop-shadow-sm">
-                        "{t.text}"
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-4 mt-auto pt-6 border-t border-white/10">
-                      <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-sm font-bold text-sky-600 shadow-md ring-2 ring-white/30">
-                        {t.avatar}
-                      </div>
-                      <div>
-                        <p className="text-white font-bold text-base shadow-sm">{t.author}</p>
-                        <p className="text-sky-100 text-xs font-medium uppercase tracking-wide opacity-90">{t.role}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+            {/* 4. Testimonials (Re-added below BMI) */}
+            <div className="bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl shadow-lg p-6 relative overflow-hidden group hover:shadow-xl transition-all duration-500 flex-1 min-h-[250px] flex flex-col justify-between">
+              <Quote className="absolute top-4 right-4 w-16 h-16 text-white/5 rotate-12" />
+              <div className="relative z-10">
+                <div className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white mb-4 w-fit border border-white/10 uppercase tracking-wider">
+                  Testimonials
+                </div>
+                <p className="text-white text-base font-medium leading-relaxed drop-shadow-sm">
+                  "{testimonials[activeTestimonial].text}"
+                </p>
               </div>
-
-              {/* Progress Indicators */}
-              <div className="flex gap-2 mt-6 justify-center">
-                {testimonials.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveTestimonial(idx)}
-                    className={`h-1.5 rounded-full transition-all duration-500 shadow-sm
-                      ${idx === activeTestimonial ? "bg-white w-8" : "bg-white/30 w-2 hover:bg-white/50"}`}
-                    aria-label={`Go to testimonial ${idx + 1}`}
-                  />
-                ))}
+              <div className="relative z-10 flex items-center gap-3 mt-4 pt-4 border-t border-white/10">
+                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-xs font-bold text-teal-600 shadow-sm">
+                  {testimonials[activeTestimonial].avatar}
+                </div>
+                <div>
+                  <p className="text-white font-bold text-sm">{testimonials[activeTestimonial].author}</p>
+                </div>
               </div>
             </div>
-          </div>
 
-        </div>
-      )}
-    </div>
+          </div>
+        )
+      }
+    </div >
   );
 }
 

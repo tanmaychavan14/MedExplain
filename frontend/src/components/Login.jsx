@@ -98,8 +98,8 @@ export default function Login({ onLogin }) {
     <div className="w-full max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
       <div className="p-8">
         <div className="text-center mb-8">
-          <div className="mx-auto w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center mb-4">
-            <Shield className="w-6 h-6 text-sky-600" />
+          <div className="mx-auto w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center mb-4">
+            <Shield className="w-6 h-6 text-teal-600" />
           </div>
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
             Welcome to MedExplain
@@ -167,7 +167,7 @@ export default function Login({ onLogin }) {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Enter your name"
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
                   />
                 </div>
               </div>
@@ -182,7 +182,7 @@ export default function Login({ onLogin }) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
                 />
               </div>
             </div>
@@ -196,7 +196,7 @@ export default function Login({ onLogin }) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
                 />
               </div>
             </div>
@@ -205,7 +205,7 @@ export default function Login({ onLogin }) {
               <button
                 onClick={() => handleEmailAuth(isSignUp)}
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-sky-600 text-white rounded-xl font-semibold shadow-lg shadow-sky-500/20 hover:bg-sky-500 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-teal-600 text-white rounded-xl font-semibold shadow-lg shadow-teal-500/20 hover:bg-teal-500 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <Loader className="w-5 h-5 animate-spin" />
@@ -224,7 +224,7 @@ export default function Login({ onLogin }) {
                   setIsSignUp(!isSignUp);
                   setError("");
                 }}
-                className="text-sm text-slate-600 hover:text-sky-600 font-medium transition-colors"
+                className="text-sm text-slate-600 hover:text-teal-600 font-medium transition-colors"
               >
                 {isSignUp ? "Already have an account? Sign in" : "Don't have an account? Sign up"}
               </button>

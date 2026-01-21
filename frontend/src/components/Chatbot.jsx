@@ -327,14 +327,14 @@ export default function Chatbot({ user, reportName, reportType, onClose }) {
       <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-[90vw] sm:w-[400px] h-[600px] max-h-[80vh] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
 
         {/* Header */}
-        <div className="bg-gradient-to-r from-sky-600 to-blue-600 p-4 flex items-center justify-between text-white shadow-md">
+        <div className="bg-gradient-to-r from-teal-600 to-cyan-600 p-4 flex items-center justify-between text-white shadow-md">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-white/20 rounded-lg backdrop-blur-md">
               <Bot className="w-5 h-5" />
             </div>
             <div>
               <h3 className="font-bold text-sm">AI Assistant</h3>
-              <p className="text-xs text-sky-100 truncate max-w-[150px]">
+              <p className="text-xs text-teal-50 truncate max-w-[150px]">
                 {reportName} ({reportType})
               </p>
             </div>
@@ -362,13 +362,13 @@ export default function Chatbot({ user, reportName, reportType, onClose }) {
         <div className="flex-1 bg-slate-50 overflow-y-auto p-4 space-y-4 custom-scrollbar" ref={chatContainerRef}>
           {initializing ? (
             <div className="flex flex-col items-center justify-center h-full text-slate-400 gap-3">
-              <Loader className="w-8 h-8 animate-spin text-sky-500" />
+              <Loader className="w-8 h-8 animate-spin text-teal-500" />
               <p className="text-sm">Initializing conversation...</p>
             </div>
           ) : messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center text-slate-400 p-6">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm">
-                <MessageSquare className="w-8 h-8 text-sky-400" />
+                <MessageSquare className="w-8 h-8 text-teal-400" />
               </div>
               <p className="text-slate-600 font-medium mb-1">Start a conversation!</p>
               <p className="text-sm">Ask me anything about your medical report.</p>
@@ -384,7 +384,7 @@ export default function Chatbot({ user, reportName, reportType, onClose }) {
               >
                 <div className={`
                   w-8 h-8 rounded-full flex items-center justify-center shrink-0 shadow-sm
-                  ${message.role === "user" ? "bg-indigo-100 text-indigo-600" : "bg-sky-100 text-sky-600"}
+                  ${message.role === "user" ? "bg-teal-100 text-teal-600" : "bg-slate-100 text-slate-600"}
                 `}>
                   {message.role === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                 </div>
@@ -392,7 +392,7 @@ export default function Chatbot({ user, reportName, reportType, onClose }) {
                 <div className={`
                   max-w-[80%] rounded-2xl p-3 shadow-sm text-sm
                   ${message.role === "user"
-                    ? "bg-indigo-600 text-white rounded-tr-none"
+                    ? "bg-teal-600 text-white rounded-tr-none"
                     : "bg-white border border-slate-100 text-slate-700 rounded-tl-none"}
                 `}>
                   <div className={`prose prose-sm max-w-none ${message.role === "user" ? "prose-invert" : ""}`}>
@@ -401,7 +401,7 @@ export default function Chatbot({ user, reportName, reportType, onClose }) {
                     </ReactMarkdown>
                   </div>
 
-                  <div className={`flex items-center gap-1 mt-1 text-[10px] opacity-70 ${message.role === "user" ? "justify-end text-indigo-200" : "text-slate-400"}`}>
+                  <div className={`flex items-center gap-1 mt-1 text-[10px] opacity-70 ${message.role === "user" ? "justify-end text-teal-100" : "text-slate-400"}`}>
                     {message.isVoice && <Mic className="w-3 h-3" />}
                     <span>{formatTime(message.timestamp)}</span>
                   </div>
@@ -412,8 +412,8 @@ export default function Chatbot({ user, reportName, reportType, onClose }) {
 
           {loading && (
             <div className="flex gap-3">
-              <div className="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center shrink-0">
-                <Bot className="w-4 h-4 text-sky-600" />
+              <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center shrink-0">
+                <Bot className="w-4 h-4 text-teal-600" />
               </div>
               <div className="bg-white border border-slate-100 rounded-2xl rounded-tl-none p-3 shadow-sm flex gap-1 items-center">
                 <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
@@ -438,7 +438,7 @@ export default function Chatbot({ user, reportName, reportType, onClose }) {
           <div className="flex items-center gap-2 mb-2">
             <button
               onClick={toggleVoiceMode}
-              className={`p-1.5 rounded-lg transition-all ${voiceMode ? 'bg-sky-100 text-sky-600' : 'text-slate-400 hover:bg-slate-50'}`}
+              className={`p-1.5 rounded-lg transition-all ${voiceMode ? 'bg-teal-100 text-teal-600' : 'text-slate-400 hover:bg-slate-50'}`}
               title={voiceMode ? "Switch to text" : "Switch to voice"}
             >
               {voiceMode ? <Mic className="w-4 h-4" /> : <MessageSquare className="w-4 h-4" />}
@@ -447,7 +447,7 @@ export default function Chatbot({ user, reportName, reportType, onClose }) {
               <select
                 value={voiceGender}
                 onChange={(e) => setVoiceGender(e.target.value)}
-                className="text-xs border border-slate-200 rounded-lg px-2 py-1 outline-none focus:border-sky-500"
+                className="text-xs border border-slate-200 rounded-lg px-2 py-1 outline-none focus:border-teal-500"
               >
                 <option value="female">Female Voice</option>
                 <option value="male">Male Voice</option>
@@ -463,12 +463,12 @@ export default function Chatbot({ user, reportName, reportType, onClose }) {
                 onChange={(e) => setInputMessage(e.target.value)}
                 placeholder="Type your message..."
                 disabled={loading || initializing}
-                className="w-full pl-4 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 outline-none transition-all disabled:opacity-50"
+                className="w-full pl-4 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all disabled:opacity-50"
               />
               <button
                 type="submit"
                 disabled={loading || initializing || !inputMessage.trim()}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-sky-600 text-white rounded-lg hover:bg-sky-500 disabled:opacity-50 disabled:hover:bg-sky-600 transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-teal-600 text-white rounded-lg hover:bg-teal-500 disabled:opacity-50 disabled:hover:bg-teal-600 transition-colors"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -482,7 +482,7 @@ export default function Chatbot({ user, reportName, reportType, onClose }) {
                   w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all
                   ${isRecording
                     ? "bg-red-500 text-white animate-pulse hover:bg-red-600"
-                    : "bg-sky-600 text-white hover:bg-sky-500 hover:scale-105"}
+                    : "bg-teal-600 text-white hover:bg-teal-500 hover:scale-105"}
                 `}
               >
                 {isRecording ? <StopCircle className="w-6 h-6" /> : <Mic className="w-6 h-6" />}

@@ -5,7 +5,7 @@ async function getAuthHeaders(user) {
   if (!user) {
     throw new Error("User not authenticated");
   }
-  
+
   // For normal login users, getIdToken returns the user ID token directly
   // For Firebase users, it returns the Firebase ID token
   const idToken = await user.getIdToken();
@@ -60,7 +60,7 @@ export async function uploadReport(file, reportType, language = "en", user) {
   formData.append("language", language);
 
   const headers = await getAuthHeaders(user);
-  
+
   const response = await fetch(`${API_BASE_URL}/reports/upload`, {
     method: "POST",
     headers,
@@ -100,7 +100,7 @@ export async function getReportSummary(reportName, reportType, user) {
     { method: "GET" },
     user
   );
-  
+
   return response.data;
 }
 
@@ -135,7 +135,7 @@ export async function compareReports(params, user) {
   }
 
   const headers = await getAuthHeaders(user);
-  
+
   const response = await fetch(`${API_BASE_URL}/comparisons`, {
     method: "POST",
     headers,
@@ -167,7 +167,7 @@ export async function getComparison(oldName, oldType, newName, newType, user) {
     { method: "GET" },
     user
   );
-  
+
   return response.data;
 }
 
@@ -178,7 +178,7 @@ export async function getComparison(oldName, oldType, newName, newType, user) {
  * @param {string} reportName - Name of the report
  * @param {string} reportType - Type of the report
  */
-export async function createChatSession(reportName, reportType,  language, user) {
+export async function createChatSession(reportName, reportType, language, user) {
   const response = await authenticatedFetch(
     "/chatbot/session",
     {
@@ -189,12 +189,12 @@ export async function createChatSession(reportName, reportType,  language, user)
       body: JSON.stringify({
         reportName,
         reportType,
-         language, 
+        language,
       }),
     },
     user
   );
-  
+
   return response.data;
 }
 
@@ -208,7 +208,7 @@ export async function getChatSession(sessionId, user) {
     { method: "GET" },
     user
   );
-  
+
   return response.data;
 }
 
@@ -218,7 +218,7 @@ export async function getChatSession(sessionId, user) {
  * @param {string} message - User's message
  * @param {string} language
  */
-export async function sendChatMessage(sessionId, message, language,user) {
+export async function sendChatMessage(sessionId, message, language, user) {
   const response = await authenticatedFetch(
     "/chatbot/message",
     {
@@ -234,7 +234,7 @@ export async function sendChatMessage(sessionId, message, language,user) {
     },
     user
   );
-  
+
   return response.data;
 }
 
@@ -264,7 +264,7 @@ export const sendVoiceMessage = async (sessionId, audioBase64, language, gender,
       gender
     }),
   });
-  
+
   if (!response.ok) throw new Error("Voice message failed");
   return await response.json();
 };
@@ -286,7 +286,7 @@ export async function explainMedicalTerm(term, language = "en", user) {
     },
     user
   );
-  
+
   return response.data;
 }
 
@@ -311,6 +311,35 @@ export async function checkSymptoms(symptoms, language = "en", user) {
     },
     user
   );
-  
+
   return response.data;
+}
+
+/**
+ * Identify details about a medicine
+ * @param {string} medicineName - Name of the medicine
+ * @param {string} language - Language code
+ * @param {Object} user - User object
+ */
+export async function identifyMedicine(medicineName, language = "en", user) {
+  const response = await authenticatedFetch(
+    "/medicine/identify",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        medicine_name: medicineName,
+        language
+      }),
+    },
+    user
+  );
+
+  return response.data; // Returns JSON string, might need parsing or service returns dict? 
+  // Backend returns identify_medicine() -> gemini text. It's usually JSON string if prompt says "Output raw JSON only".
+  // Actually gemini_service identify_medicine returns response.text.strip(). It is a JSON string.
+  // The route returns {success: true, data: result}.
+  // So response.data is the JSON string.
 }

@@ -288,4 +288,107 @@ Remember: Be helpful but cautious. Patient safety is paramount.
         contents=prompt
     )
 
+
     return response.text
+
+
+def generate_comparison_analysis(old_summary: str, new_summary: str, language: str = "en") -> str:
+    """
+    Compare two medical reports and return a structured JSON analysis.
+    """
+    prompt = f"""
+You are a highly intelligent medical comparison assistant.
+
+CRITICAL CONTEXT:
+- Comparing medical reports for the SAME patient.
+- Goal: Identify changes, trends, and health progress.
+- Old Report (Base): {{old_summary}}
+- New Report (Current): {{new_summary}}
+- Language: {{language}}
+
+TASK:
+Analyze the differences and output a STRICT JSON object.
+
+JSON STRUCTURE (MANDATORY):
+{{
+  "overall_status": "String ('Improved', 'Stable', 'Worsened', 'Mixed')",
+  "status_color": "String ('green', 'blue', 'red', 'orange')",
+  "changes": [
+    {{
+      "parameter": "String (e.g., 'Hemoglobin')",
+      "change_type": "String ('Improved', 'Stable', 'Worsened', 'New Finding')",
+      "details": "String (e.g., 'Increased from 11.2 to 13.5')",
+      "significance": "String (Brief medical implication)"
+    }}
+  ],
+  "visualizations": [
+     {{
+        "label": "String (e.g., 'Hemoglobin')",
+        "old_value": Number (or null if not found),
+        "new_value": Number (or null if not found),
+        "unit": "String (e.g., 'g/dL')"
+     }}
+  ],
+  "summary_markdown": "String (A patient-friendly paragraph summarizing the progress in Markdown)",
+  "recommendation": "String (General advice based on the trend, e.g., 'Continue current medication...')",
+  "disclaimer": "String (Standard medical disclaimer)"
+}}
+
+RULES:
+1. "changes": Extract 3-7 key distinct changes.
+2. "status_color": green (good), red (bad), blue (stable), orange (mixed/attention needed).
+3. "summary_markdown": Use bolding for emphasis. Keep it encouraging but realistic.
+4. "details": Be specific with numbers if available in the summaries.
+5. "visualizations": Extract ONLY parameters where BOTH old and new numerical values are clearly present. Max 5 items.
+6. NO MARKDOWN CODE BLOCKS (` ```json `). JUST THE RAW JSON STRING.
+"""
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+        config={
+            'response_mime_type': 'application/json'
+        }
+    )
+    
+    text = response.text.strip()
+    # Remove markdown code formatting if present
+    if text.startswith("```json"):
+        text = text[7:].strip()
+    elif text.startswith("```"):
+        text = text[3:].strip()
+    if text.endswith("```"):
+        text = text[:-3].strip()
+
+    return text
+
+def identify_medicine(medicine_name: str, language: str = 'en') -> str:
+    prompt = f"""
+You are a helpful medical assistant.
+User wants to know about the medicine: "{medicine_name}".
+
+Provide a structured JSON response with the following fields:
+1. "purpose": Simply strictly in 3-5 words what it treats (e.g., "Diabetes / Blood Sugar").
+2. "best_time": When to take it (e.g., "Before food", "After food", "At night").
+3. "side_effects": One or two common side effects (e.g., "Nausea, Dizziness").
+4. "name_confirmed": The full correct generic or brand name if the user had a typo.
+
+Language: {language}
+Output raw JSON only.
+
+Example JSON:
+{{
+  "purpose": "Pain relief & fever",
+  "best_time": "After food",
+  "side_effects": "Nausea, Gastric irritation",
+  "name_confirmed": "Dolo 650 (Paracetamol)"
+}}
+"""
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+        config={
+            'response_mime_type': 'application/json'
+        }
+    )
+    return response.text.strip()
