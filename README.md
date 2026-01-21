@@ -1,4 +1,4 @@
-# MedExplain 
+# MedExplain
 
 **Medical Reports, Simplified.**
 
@@ -8,7 +8,7 @@ MedExplain is an advanced, AI-powered platform designed to bridge the gap betwee
 
 ##  Key Features
 
-### 1. Smart PDF Report Analysis
+### 1. 📄 Smart PDF Report Analysis
 Upload your medical reports (PDF format) and get instant, comprehensive analysis.
 *   **Modular Insight Blocks**: Key findings are categorized (e.g., Blood Health, Liver Function) and visually tagged with status indicators (`Positive`, `Warning`, `Negative`, `Neutral`) for quick scanning.
 *   **Detailed Explanations**: A patient-friendly summary that breaks down:
@@ -33,24 +33,27 @@ Don't know what a medicine is for?
     *   **Side Effects**: Common things to watch out for.
 *   **Safety**: Includes a prominent medical disclaimer urging user to consult doctors.
 
-### 4. Context-Aware Medical Chatbot
+### 2. 💬 Context-Aware Medical Chatbot
 Have questions about your specific report?
 *   **Report-Grounded Answers**: The chatbot is "grounded" in the context of your uploaded report. It answers questions *only* based on the provided data, ensuring relevant and safe responses.
 *   **Safety First**: The AI is strictly instructed not to diagnose or prescribe, but rather to explain and clarify findings.
 
-### 5.  Multi-Language Support
+### 3. 🌍 Multi-Language Support
 MedExplain is built for inclusivity.
 *   **Languages**: Fully supports **English**, **Hindi**, and **Marathi**.
 *   **Localized Summaries**: Get the entire analysis, insight cards, and medicine details in your preferred language.
 
-### 6.  Design System & Accessibility
-*   **Unified Medical Design**: Built on a strict design token system ("Medical Teal" branding) for trust and calmness.
-*   **Responsive**: Fully optimized for Mobile, Tablet, and Desktop.
-*   **Accessible**: High contrast text, clear typography (Plus Jakarta Sans), and screen-reader friendly elements.
+### 4. 🧰 Integrated Medical Tools
+*   **Medical Dictionary**: Instantly search for complex medical terms to get simple, jargon-free definitions.
+*   **Symptom Checker**: Describe your symptoms to get educational insights on possible causes (with strict medical disclaimers).
+
+### 5. 🛡️ Secure & Private
+*   **Privacy Focused**: Reports are processed securely.
+*   **Authentication**: User accounts allow for secure access to personal report history.
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Frontend
 *   **Framework**: React 19 (Vite)
@@ -134,7 +137,7 @@ The application will launch in your browser at `http://localhost:5173`.
 
 ---
 
-## 📖 Usage Guide
+##  Usage Guide
 
 1.  **Login/Register**: Create an account to save your report history.
 2.  **Upload**:
@@ -156,7 +159,7 @@ The application will launch in your browser at `http://localhost:5173`.
 
 ---
 
-## Disclaimer
+## ⚠️ Disclaimer
 
 **MedExplain is an educational tool.**
 It uses Artificial Intelligence to explain medical data but **does NOT provide medical diagnoses**.
