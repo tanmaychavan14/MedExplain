@@ -547,62 +547,58 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
             </div>
 
             {/* 2. Why Choose MedExplain - Features (Premium Enhanced) */}
-            <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 overflow-hidden ring-1 ring-slate-900/5 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] group/card relative">
+            <div className="bg-gradient-to-br from-white to-slate-50/50 backdrop-blur-2xl rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 ring-1 ring-slate-900/5 overflow-hidden relative group/container p-6">
 
-              {/* Decorative Gradient Line */}
-              <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500 opacity-80"></div>
+              {/* Decorative background elements */}
+              <div className="absolute -top-24 -right-24 w-48 h-48 bg-teal-400/10 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+              <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
-              <div className="p-6 border-b border-slate-100/60 bg-white/40 relative">
-                <h3 className="text-lg font-extrabold text-slate-800 flex items-center gap-2">
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-cyan-600 drop-shadow-sm tracking-tight">
+              {/* Header */}
+              <div className="relative z-10 mb-6 flex items-center justify-between">
+                <h3 className="text-lg font-extrabold text-slate-800 flex items-center gap-3">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-500/20 rotate-3 transition-transform group-hover/container:rotate-6">
+                    <Star className="w-4 h-4 fill-white/90" />
+                  </div>
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-600">
                     Why MedExplain?
                   </span>
                 </h3>
               </div>
 
-              <div className="divide-y divide-slate-100/60">
+              <div className="space-y-4 relative z-10">
                 {[
                   {
                     title: "Instant Clarity",
-                    desc: "Understand complex reports in seconds.",
+                    desc: "Review complex medical reports in seconds.",
                     icon: Zap,
-                    color: "text-amber-500",
-                    bg: "bg-amber-50",
-                    border: "group-hover:border-amber-400/50",
-                    shadow: "shadow-amber-500/20"
+                    gradient: "from-amber-400 to-orange-500",
+                    shadow: "shadow-amber-500/20",
                   },
                   {
                     title: "100% Private",
                     desc: "Your health data never leaves your device.",
                     icon: ShieldCheck,
-                    color: "text-emerald-500",
-                    bg: "bg-emerald-50",
-                    border: "group-hover:border-emerald-400/50",
-                    shadow: "shadow-emerald-500/20"
+                    gradient: "from-emerald-400 to-teal-500",
+                    shadow: "shadow-emerald-500/20",
                   },
                   {
                     title: "Smart Insights",
                     desc: "AI-powered analysis you can trust.",
                     icon: BrainCircuit,
-                    color: "text-indigo-500",
-                    bg: "bg-indigo-50",
-                    border: "group-hover:border-indigo-400/50",
-                    shadow: "shadow-indigo-500/20"
+                    gradient: "from-blue-400 to-indigo-500",
+                    shadow: "shadow-indigo-500/20",
                   }
                 ].map((item, i) => (
                   <div key={i}
-                    className={`group p-5 flex items-center gap-4 hover:bg-white/90 transition-all duration-500 ease-out cursor-default border-l-[3px] border-transparent ${item.border} relative overflow-hidden`}
-                    style={{ animationDelay: `${i * 150}ms` }}
+                    className="group bg-white/80 hover:bg-white border border-slate-100 hover:border-teal-100 p-4 rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-teal-900/5 hover:-translate-y-1 flex items-center gap-4 relative overflow-hidden cursor-default"
                   >
-                    <div className={`w-12 h-12 rounded-2xl ${item.bg} ${item.color} flex items-center justify-center shadow-lg ${item.shadow} group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 ring-4 ring-white relative z-10`}>
-                      <item.icon className="w-6 h-6 group-hover:animate-pulse" />
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shrink-0 shadow-md ${item.shadow} group-hover:scale-110 transition-transform duration-500`}>
+                      <item.icon className="w-5 h-5 text-white" />
                     </div>
-                    <div className="relative z-10">
-                      <h4 className="font-bold text-slate-800 text-sm group-hover:text-teal-700 transition-colors duration-300">{item.title}</h4>
-                      <p className="text-xs text-slate-500 font-medium mt-0.5 leading-relaxed group-hover:text-slate-600 transition-colors duration-300">{item.desc}</p>
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm group-hover:text-teal-800 transition-colors">{item.title}</h4>
+                      <p className="text-xs text-slate-500 font-medium mt-1 leading-relaxed">{item.desc}</p>
                     </div>
-                    {/* Subtle Background Glow on Hover */}
-                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transform`}></div>
                   </div>
                 ))}
               </div>
