@@ -33,7 +33,7 @@ export default function Footer() {
                         <span>Built by</span>
                         <button
                             onClick={() => setShowTeam(true)}
-                            className="font-bold text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:underline decoration-wavy underline-offset-4 transition-all cursor-pointer"
+                            className="font-bold text-teal-600 hover:text-teal-700 hover:underline decoration-2 underline-offset-2 transition-all cursor-pointer"
                         >
                             Blind Coders
                         </button>

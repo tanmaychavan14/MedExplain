@@ -546,58 +546,48 @@ export default function UploadReport({ user, onResult, onUploadSuccess, summary 
               </div>
             </div>
 
-            {/* 2. Why Choose MedExplain - Features (Premium Enhanced) */}
-            <div className="bg-gradient-to-br from-white to-slate-50/50 backdrop-blur-2xl rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 ring-1 ring-slate-900/5 overflow-hidden relative group/container p-6">
-
-              {/* Decorative background elements */}
-              <div className="absolute -top-24 -right-24 w-48 h-48 bg-teal-400/10 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
-              <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
-
-              {/* Header */}
-              <div className="relative z-10 mb-6 flex items-center justify-between">
-                <h3 className="text-lg font-extrabold text-slate-800 flex items-center gap-3">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-500/20 rotate-3 transition-transform group-hover/container:rotate-6">
-                    <Star className="w-4 h-4 fill-white/90" />
-                  </div>
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-600">
-                    Why MedExplain?
-                  </span>
-                </h3>
+            {/* 2. Why Choose MedExplain? (User Friendly & Professional) */}
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden relative p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-teal-100 text-teal-600 rounded-xl">
+                  <Sparkles className="w-5 h-5 fill-current" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-800">Why MedExplain?</h3>
               </div>
 
-              <div className="space-y-4 relative z-10">
+              <div className="space-y-4">
                 {[
                   {
-                    title: "Instant Clarity",
-                    desc: "Review complex medical reports in seconds.",
+                    title: "No More Jargon",
+                    desc: "We turn complex medical terms into simple language anyone can understand.",
                     icon: Zap,
-                    gradient: "from-amber-400 to-orange-500",
-                    shadow: "shadow-amber-500/20",
+                    color: "text-amber-500",
+                    bg: "bg-amber-50"
                   },
                   {
-                    title: "100% Private",
-                    desc: "Your health data never leaves your device.",
+                    title: "Your Data is Safe",
+                    desc: "We prioritize your privacy. Your reports are analyzed securely and never shared.",
                     icon: ShieldCheck,
-                    gradient: "from-emerald-400 to-teal-500",
-                    shadow: "shadow-emerald-500/20",
+                    color: "text-emerald-500",
+                    bg: "bg-emerald-50"
                   },
                   {
-                    title: "Smart Insights",
-                    desc: "AI-powered analysis you can trust.",
-                    icon: BrainCircuit,
-                    gradient: "from-blue-400 to-indigo-500",
-                    shadow: "shadow-indigo-500/20",
+                    title: "Better Conversations",
+                    desc: "Walk into your doctor's appointment confident and ready to ask the right questions.",
+                    icon: MessageCircle,
+                    color: "text-blue-500",
+                    bg: "bg-blue-50"
                   }
                 ].map((item, i) => (
-                  <div key={i}
-                    className="group bg-white/80 hover:bg-white border border-slate-100 hover:border-teal-100 p-4 rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-teal-900/5 hover:-translate-y-1 flex items-center gap-4 relative overflow-hidden cursor-default"
-                  >
-                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shrink-0 shadow-md ${item.shadow} group-hover:scale-110 transition-transform duration-500`}>
-                      <item.icon className="w-5 h-5 text-white" />
+                  <div key={i} className="flex gap-4">
+                    <div className={`w-10 h-10 shrink-0 rounded-full ${item.bg} ${item.color} flex items-center justify-center`}>
+                      <item.icon className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate-800 text-sm group-hover:text-teal-800 transition-colors">{item.title}</h4>
-                      <p className="text-xs text-slate-500 font-medium mt-1 leading-relaxed">{item.desc}</p>
+                      <h4 className="font-bold text-slate-800 text-sm">{item.title}</h4>
+                      <p className="text-xs text-slate-500 leading-relaxed mt-1 font-medium">
+                        {item.desc}
+                      </p>
                     </div>
                   </div>
                 ))}

@@ -1,9 +1,11 @@
 // components/Header.jsx
-import { LogOut, Stethoscope, Phone, AlertCircle, X } from "lucide-react";
+import { LogOut, Stethoscope, Phone, AlertCircle, X, Moon } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import SleepGuideModal from "./SleepGuideModal";
 
 export default function Header({ user, onLogout }) {
   const [showEmergency, setShowEmergency] = useState(false);
+  const [showSleepGuide, setShowSleepGuide] = useState(false);
   const emergencyRef = useRef(null);
 
   // Close popup when clicking outside
@@ -62,6 +64,16 @@ export default function Header({ user, onLogout }) {
           {/* User Section */}
           {user && (
             <div className="flex items-center gap-2 sm:gap-5 relative">
+
+              {/* Sleep Guide Button */}
+              <button
+                onClick={() => setShowSleepGuide(true)}
+                className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-sm font-bold bg-indigo-50 text-indigo-600 border border-indigo-100 hover:bg-indigo-100 hover:border-indigo-200 hover:shadow-sm transition-all duration-200"
+                title="Sleep Guide"
+              >
+                <Moon className="w-4 h-4 fill-current" />
+                <span className="hidden sm:inline tracking-wide">Sleep Guide</span>
+              </button>
 
               {/* Emergency SOS Button */}
               <div className="relative" ref={emergencyRef}>
@@ -150,7 +162,7 @@ export default function Header({ user, onLogout }) {
                   <span className="text-sm font-bold text-[var(--color-text-primary)] leading-tight">
                     {user.displayName?.split(' ')[0] || 'User'}
                   </span>
-                  <span className="text-[10px] font-medium text-[var(--color-text-tertiary)]">
+                  <span className="text-sm font-medium text-[var(--color-text-tertiary)]">
                     Online
                   </span>
                 </div>
@@ -171,6 +183,9 @@ export default function Header({ user, onLogout }) {
           )}
         </div>
       </div>
+
+      {/* Sleep Guide Modal */}
+      {showSleepGuide && <SleepGuideModal onClose={() => setShowSleepGuide(false)} />}
     </header>
   );
 }
