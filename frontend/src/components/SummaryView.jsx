@@ -1,6 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { FileText, Bot, AlertCircle, Info, Stethoscope, Activity, ClipboardList } from "lucide-react";
+import { FileText, Bot, AlertCircle, Info, Stethoscope, Activity, ClipboardList, Printer } from "lucide-react";
 import InsightCard from "./InsightCard";
 import ReportCharts from "./ReportCharts";
 
@@ -36,35 +36,49 @@ export default function SummaryView({ summary, report, onOpenChatbot }) {
       {/* Summary Card */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col relative">
         <div className="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/95 backdrop-blur-sm sticky top-0 z-10 rounded-t-2xl">
+
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
+            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg print:hidden">
               <ClipboardList className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-900">Report Summary</h2>
+              <h2 className="text-xl font-bold text-slate-900 print:text-2xl print:mb-2 text-left">Report Summary</h2>
               {report && (
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-xs font-semibold px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
+                <div className="flex items-center gap-2 mt-0.5 print:mt-0">
+                  <span className="text-xs font-semibold px-2 py-0.5 bg-slate-100 text-slate-600 rounded print:bg-transparent print:p-0 print:text-slate-500 print:text-sm">
                     {report.reportType}
                   </span>
-                  <span className="text-xs text-slate-400 max-w-[150px] truncate">
-                    {report.reportName}
+                  <span className="text-xs text-slate-400 max-w-[150px] truncate print:text-slate-500 print:text-sm print:max-w-none">
+                    • {report.reportName}
+                  </span>
+                  <span className="hidden print:inline text-sm text-slate-400">
+                    • {new Date().toLocaleDateString()}
                   </span>
                 </div>
               )}
             </div>
           </div>
 
-          {report && onOpenChatbot && (
+          <div className="flex items-center gap-3 no-print">
             <button
-              className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl shadow-md hover:shadow-lg hover:from-teal-500 hover:to-cyan-500 transition-all duration-200"
-              onClick={() => onOpenChatbot(report)}
-              title="Ask AI Assistant about this report"
+              onClick={() => window.print()}
+              className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+              title="Print Report"
             >
-              <Bot className="w-5 h-5 group-hover:animate-bounce" />
-              <span className="font-medium">Ask AI Assistant</span>
+              <Printer className="w-5 h-5" />
             </button>
-          )}
+
+            {report && onOpenChatbot && (
+              <button
+                className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl shadow-md hover:shadow-lg hover:from-teal-500 hover:to-cyan-500 transition-all duration-200"
+                onClick={() => onOpenChatbot(report)}
+                title="Ask AI Assistant about this report"
+              >
+                <Bot className="w-5 h-5 group-hover:animate-bounce" />
+                <span className="font-medium">Ask AI</span>
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="p-6">

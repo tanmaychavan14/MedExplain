@@ -11,6 +11,7 @@ import Chatbot from "./components/Chatbot";
 import Header from "./components/Header";
 import NavigationTabs from "./components/NavigationTabs";
 import Footer from "./components/Footer";
+import BodyGuide from "./components/BodyGuide";
 
 function App() {
   // User state
@@ -144,6 +145,12 @@ function App() {
         return (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
             <CompareReports user={user} />
+          </div>
+        );
+      case "guide":
+        return (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
+            <BodyGuide />
           </div>
         );
       default:

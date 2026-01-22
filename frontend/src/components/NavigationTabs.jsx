@@ -1,11 +1,11 @@
-// components/NavigationTabs.jsx
-import { UploadCloud, FileText, GitCompare } from "lucide-react";
+import { UploadCloud, FileText, GitCompare, Activity } from "lucide-react";
 
 function NavigationTabs({ activeView, onTabChange }) {
   const tabs = [
     { id: "upload", label: "Upload Report", icon: UploadCloud },
     { id: "list", label: "My Reports", icon: FileText },
-    { id: "compare", label: "Compare Reports", icon: GitCompare }
+    { id: "compare", label: "Compare Reports", icon: GitCompare },
+    { id: "guide", label: "Body Guide", icon: Activity }
   ];
 
   return (

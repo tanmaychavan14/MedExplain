@@ -27,7 +27,8 @@ import {
   History,
   ClipboardCheck,
   Stethoscope,
-  Activity
+  Activity,
+  Printer
 } from "lucide-react";
 
 
@@ -214,6 +215,7 @@ export default function CompareReports({ user }) {
         </div>
       </div>
 
+
       {/* Selection Area - Clean Professional Card */}
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 md:p-8 relative">
 
@@ -287,8 +289,19 @@ export default function CompareReports({ user }) {
               <p className="text-2xl font-bold text-slate-800">{comparisonData.overall_status}</p>
             </div>
 
+            {/* Print Button (Screen Only) */}
+            <div className="flex items-center gap-3 no-print">
+              <button
+                onClick={() => window.print()}
+                className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold transition-colors"
+              >
+                <Printer className="w-4 h-4" />
+                Print Analysis
+              </button>
+            </div>
+
             {/* Dynamic Pulse for Health Score (Simulated) */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-lg border border-slate-100">
+            <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-lg border border-slate-100 print:hidden">
               <div className={`w-2.5 h-2.5 rounded-full ${comparisonData.status_color === 'green' ? 'bg-emerald-500 animate-pulse' :
                 comparisonData.status_color === 'red' ? 'bg-rose-500 animate-pulse' :
                   'bg-slate-400'

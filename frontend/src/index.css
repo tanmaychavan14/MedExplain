@@ -247,11 +247,26 @@ h6 {
 }
 
 /* Hide scrollbar for clean UI but keep functionality */
+.no-scrollbar::-webkit-scrollbar,
 .scroller-hide::-webkit-scrollbar {
   display: none;
 }
 
+.no-scrollbar,
 .scroller-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Mask utility for scrollable areas */
+.mask-fade-right {
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
 }

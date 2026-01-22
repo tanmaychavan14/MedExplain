@@ -21,10 +21,22 @@ Upload your medical reports (PDF format) and get instant, comprehensive analysis
 ### 2. Clinical Report Comparison & Trends
 Track your health over time by comparing two different reports.
 *   **Side-by-Side Analysis**: Compare an "Old Report" (Baseline) with a "New Report" (Follow-up) to see what has changed.
-*   **visual Trend Charts**: A dedicated **Trend Analysis** section visualizes the changes in your vital metrics (e.g., Hemoglobin, Cholesterol) using interactive **Bar Charts**, comparing previous vs. current values.
+*   **Visual Trend Charts**: A dedicated **Trend Analysis** section visualizes the changes in your vital metrics (e.g., Hemoglobin, Cholesterol) using interactive **Bar Charts**, comparing previous vs. current values.
 *   **Progress Tracking**: The AI identifies if metrics have "Improved", "Worsened", or remained "Stable" and provides an overall health trajectory score.
 
-### 3. AI Medicine Decoder
+### 3. Interactive Body Guide
+A visual, interactive guide to understanding your body.
+*   **Organ Explorer**: Explore key organ systems (Heart, Brain, Liver, Kidneys, etc.) via an interactive selection grid.
+*   **Medical Connectivity**: Learn which **Lab Tests** correlate with each organ (e.g., "Heart" → "Lipid Profile").
+*   **Health Tips**: Get physician-curated tips and descriptions for maintaining the health of each specific system.
+
+### 4. 🖨️ Professional Print-Ready Reports
+Generate doctor-ready hard copies of your digital insights.
+*   **One-Click Printing**: Dedicated print buttons in both Summary and Comparison views.
+*   **Clean Layout**: Automatically strips away UI elements (buttons, sidebars) to produce a clean, branded PDF document.
+*   **MedExplain Branding**: Includes a professional "MedExplain" header and layout suitable for physical filing.
+
+### 5. 💊 AI Medicine Decoder
 Don't know what a medicine is for?
 *   **Instant Identification**: Type the name of any medicine (e.g., "Dolo 650") to get instant details.
 *   **Structured Info**: Returns clearly defined breakdown:
@@ -33,21 +45,17 @@ Don't know what a medicine is for?
     *   **Side Effects**: Common things to watch out for.
 *   **Safety**: Includes a prominent medical disclaimer urging user to consult doctors.
 
-### 2. 💬 Context-Aware Medical Chatbot
+### 6. 💬 Context-Aware Medical Chatbot
 Have questions about your specific report?
 *   **Report-Grounded Answers**: The chatbot is "grounded" in the context of your uploaded report. It answers questions *only* based on the provided data, ensuring relevant and safe responses.
 *   **Safety First**: The AI is strictly instructed not to diagnose or prescribe, but rather to explain and clarify findings.
 
-### 3. 🌍 Multi-Language Support
+### 7. 🌍 Multi-Language Support
 MedExplain is built for inclusivity.
 *   **Languages**: Fully supports **English**, **Hindi**, and **Marathi**.
 *   **Localized Summaries**: Get the entire analysis, insight cards, and medicine details in your preferred language.
 
-### 4. 🧰 Integrated Medical Tools
-*   **Medical Dictionary**: Instantly search for complex medical terms to get simple, jargon-free definitions.
-*   **Symptom Checker**: Describe your symptoms to get educational insights on possible causes (with strict medical disclaimers).
-
-### 5. 🛡️ Secure & Private
+### 8. 🛡️ Secure & Private
 *   **Privacy Focused**: Reports are processed securely.
 *   **Authentication**: User accounts allow for secure access to personal report history.
 
@@ -57,7 +65,7 @@ MedExplain is built for inclusivity.
 
 ### Frontend
 *   **Framework**: React 19 (Vite)
-*   **Styling**: Tailwind CSS v4 (Custom Design System with CSS Variables)
+*   **Styling**: Tailwind CSS v4 (Custom "Teal" Premium Design System)
 *   **Visualization**: Recharts (for dynamic trend plotting)
 *   **Icons**: Lucide React
 *   **Markdown**: React Markdown & Remark GFM
