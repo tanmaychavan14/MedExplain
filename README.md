@@ -1,217 +1,183 @@
-# MedExplain - AI Powered Medical Report Simplifier
+# MedExplain
 
-**Bridging the gap between complex medical diagnostics and patient understanding.**
+**Medical Reports, Simplified.**
 
-MedExplain is an advanced, AI-powered platform designed to demystify medical reports. By leveraging state-of-the-art Large Language Models (LLMs) and a unified, accessible design system, MedExplain transforms dense medical reports into clear, modular, visual, and actionable insights, making healthcare information accessible to everyone.
-
-![MedExplain Banner](https://via.placeholder.com/1200x400?text=MedExplain+Dashboard+Preview)
+MedExplain is an advanced, AI-powered platform designed to bridge the gap between complex medical diagnostics and patient understanding. By leveraging state-of-the-art Large Language Models (LLMs) and a unified, accessible design system, MedExplain transforms dense medical reports into clear, modular, visual, and actionable insights, making healthcare information accessible to everyone.
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 ### 1. 📄 Smart PDF Report Analysis
-*   **Modular Insight Blocks**: Key findings are categorized (e.g., Blood Health, Liver Function) and visually tagged with status indicators (`Positive`, `Warning`, `Negative`, `Neutral`).
-*   **Detailed Explanations**: Patient-friendly summaries that break down:
-    *   **What**: The report's purpose.
-    *   **Findings**: Key metrics in plain English.
-    *   **Ranges**: Values within and outside normal limits.
-    *   **Care**: General wellness tips based on the data.
-*   **Data Visualization**: Numerical metrics are automatically extracted and plotted as charts.
+Upload your medical reports (PDF format) and get instant, comprehensive analysis.
+*   **Modular Insight Blocks**: Key findings are categorized (e.g., Blood Health, Liver Function) and visually tagged with status indicators (`Positive`, `Warning`, `Negative`, `Neutral`) for quick scanning.
+*   **Detailed Explanations**: A patient-friendly summary that breaks down:
+    *   What the report is about.
+    *   Key findings in simple language.
+    *   Values within and outside normal ranges.
+    *   General care notes (based strictly on the report).
+*   **Data Visualization**: Key numerical metrics are automatically extracted from the report and plotted as charts, showing exactly where you stand against reference ranges.
 
-### 2. 📉 Clinical Report Comparison & Trends
-*   **Side-by-Side Analysis**: Compare an "Old Report" vs. "New Report" to track health changes.
-*   **Visual Trend Charts**: Interactive bar charts visualize changes in vital metrics (e.g., Hemoglobin, Cholesterol) over time.
-*   **Progress Tracking**: AI alerts if metrics have "Improved", "Worsened", or remained "Stable".
+### 2. Clinical Report Comparison & Trends
+Track your health over time by comparing two different reports.
+*   **Side-by-Side Analysis**: Compare an "Old Report" (Baseline) with a "New Report" (Follow-up) to see what has changed.
+*   **Visual Trend Charts**: A dedicated **Trend Analysis** section visualizes the changes in your vital metrics (e.g., Hemoglobin, Cholesterol) using interactive **Bar Charts**, comparing previous vs. current values.
+*   **Progress Tracking**: The AI identifies if metrics have "Improved", "Worsened", or remained "Stable" and provides an overall health trajectory score.
 
-### 3. 💬 Context-Aware Medical Chatbot
-*   **Report-Grounded Answers**: The chatbot answers questions *specifically* based on your uploaded report data.
-*   **Safety First**: Strictly instructed to explain and clarify, not diagnose or prescribe.
+### 3. Interactive Body Guide
+A visual, interactive guide to understanding your body.
+*   **Organ Explorer**: Explore key organ systems (Heart, Brain, Liver, Kidneys, etc.) via an interactive selection grid.
+*   **Medical Connectivity**: Learn which **Lab Tests** correlate with each organ (e.g., "Heart" → "Lipid Profile").
+*   **Health Tips**: Get physician-curated tips and descriptions for maintaining the health of each specific system.
 
-### 4. 🩻 Interactive Body Guide & Tools
-*   **Organ Explorer**: Visual guide connecting body parts to relevant lab tests.
-*   **Medicine Decoder**: Identify pills, their purpose, best time to take, and side effects.
-*   **Symptom Checker**: Educational guidance for common symptoms.
+### 4. 🖨️ Professional Print-Ready Reports
+Generate doctor-ready hard copies of your digital insights.
+*   **One-Click Printing**: Dedicated print buttons in both Summary and Comparison views.
+*   **Clean Layout**: Automatically strips away UI elements (buttons, sidebars) to produce a clean, branded PDF document.
+*   **MedExplain Branding**: Includes a professional "MedExplain" header and layout suitable for physical filing.
 
-### 5. 🌍 Multi-Language Support
+### 5. 💊 AI Medicine Decoder
+Don't know what a medicine is for?
+*   **Instant Identification**: Type the name of any medicine (e.g., "Dolo 650") to get instant details.
+*   **Structured Info**: Returns clearly defined breakdown:
+    *   **Purpose**: What is it used for?
+    *   **Best Time**: When to take it? (e.g., After food).
+    *   **Side Effects**: Common things to watch out for.
+*   **Safety**: Includes a prominent medical disclaimer urging user to consult doctors.
+
+### 6. 💬 Context-Aware Medical Chatbot
+Have questions about your specific report?
+*   **Report-Grounded Answers**: The chatbot is "grounded" in the context of your uploaded report. It answers questions *only* based on the provided data, ensuring relevant and safe responses.
+*   **Safety First**: The AI is strictly instructed not to diagnose or prescribe, but rather to explain and clarify findings.
+
+### 7. 🌍 Multi-Language Support
+MedExplain is built for inclusivity.
 *   **Languages**: Fully supports **English**, **Hindi**, and **Marathi**.
-*   **Localized Experience**: Get summaries, insights, and answers in your preferred language.
+*   **Localized Summaries**: Get the entire analysis, insight cards, and medicine details in your preferred language.
+
+### 8. 🛡️ Secure & Private
+*   **Privacy Focused**: Reports are processed securely.
+*   **Authentication**: User accounts allow for secure access to personal report history.
 
 ---
 
-## 🏗️ System Architecture
+##  Technology Stack
 
-MedExplain follows a modern client-server architecture, leveraging the power of Python for backend processing and React for a responsive frontend.
+### Frontend
+*   **Framework**: React 19 (Vite)
+*   **Styling**: Tailwind CSS v4 (Custom "Teal" Premium Design System)
+*   **Visualization**: Recharts (for dynamic trend plotting)
+*   **Icons**: Lucide React
+*   **Markdown**: React Markdown & Remark GFM
 
-```mermaid
-graph TD
-    User[User Client] -->|HTTPS| Frontend[Frontend (React + Vite)]
-    
-    subgraph "Frontend Layer"
-        Frontend -->|Routing| Router[React Router]
-        Frontend -->|State| Context[Context API]
-        Frontend -->|API Calls| Axios[Axios/Fetch]
-    end
-    
-    Frontend -->|REST API| Backend[Backend (Flask Python)]
-    
-    subgraph "Backend Layer"
-        Backend -->|Auth Route| Auth[Auth Middleware]
-        Backend -->|Report Logic| Process[Report Processor]
-        Backend -->|Chat Logic| Chat[Chatbot Service]
-        
-        Process -->|PDF/Image| OCR[PyMuPDF / OCR]
-    end
-    
-    subgraph "Data & AI Services"
-        Backend -->|Store/Retrieve| Firebase[(Firebase Firestore)]
-        Backend -->|Generate Content| Gemini[Google Gemini 1.5 Flash]
-    end
-```
+### Backend
+*   **Server**: Flask (Python)
+*   **AI Model**: Google Gemini 1.5 Flash (`gemini-2.5-flash`)
+    *   *Optimized for JSON output mode for structured data.*
+*   **Database**: Firebase / Firestore (Identity & Data storage)
+*   **PDF Processing**: Custom PDF parsing & chunking
 
 ---
 
-## 🛠️ Technology Stack
+##  Installation & Setup
 
-### **Frontend**
-*   **Framework**: [React 19](https://react.dev/)
-*   **Build Tool**: [Vite](https://vitejs.dev/)
-*   **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) (Custom "Teal" Premium Theme)
-*   **Icons**: [Lucide React](https://lucide.dev/)
-*   **Visualization**: [Recharts](https://recharts.org/) (for trend plotting)
-*   **Markdown**: `react-markdown`, `remark-gfm`
+Follow these steps to run MedExplain locally.
 
-### **Backend**
-*   **Server**: [Flask](https://flask.palletsprojects.com/) (Python 3.10+)
-*   **AI Model**: **Google Gemini 1.5 Flash** (`google-genai`)
-*   **Database**: [Firebase Firestore](https://firebase.google.com/) (NoSQL)
-*   **Authentication**: Firebase Auth (Admin SDK)
-*   **PDF Processing**: `PyMuPDF`, `Pytesseract`
-*   **Audio/Voice**: `gTTS` (Google Text-to-Speech), `SpeechRecognition`
-
----
-
-## 📂 Directory Structure
-
-```plaintext
-MedExplain/
-├── Backend/                 # Python Flask Server
-│   ├── routes/              # API Route Blueprints
-│   │   ├── auth_routes.py
-│   │   ├── chatbot_routes.py
-│   │   ├── report_routes.py
-│   │   └── ...
-│   ├── services/            # Business Logic & AI Integration
-│   ├── middleware/          # Auth & Validation
-│   ├── app.py               # Entry Point
-│   └── requirements.txt     # Python Dependencies
-│
-├── frontend/                # React Vite Application
-│   ├── src/
-│   │   ├── components/      # Reusable UI Components
-│   │   ├── services/        # API Handling
-│   │   ├── pages/           # Main Route Views
-│   │   └── App.jsx          # Root Component
-│   ├── package.json         # Node Dependencies
-│   └── vite.config.js       # Vite Configuration
-```
-
----
-
-## 🔌 API Documentation
-
-### **1. Report Management** (`/reports`)
-
-| Method | Endpoint | Description | Body / Query |
-| :--- | :--- | :--- | :--- |
-| **POST** | `/upload` | Upload and analyze a medical report. | `FormData`: `file` (PDF/Img), `reportType`, `language` |
-| **GET** | `/` | List all processed reports for the user. | *None* |
-| **GET** | `/summary` | Get the detailed summary of a specific report. | `?name=...&type=...` |
-
-### **2. Chatbot** (`/chatbot`)
-
-| Method | Endpoint | Description | Body / Query |
-| :--- | :--- | :--- | :--- |
-| **POST** | `/session` | Start a new chat session grounded in a report. | JSON: `{ "reportName": "...", "reportType": "...", "language": "..." }` |
-| **POST** | `/message` | Send a message to the AI. | JSON: `{ "sessionId": "...", "message": "...", "language": "..." }` |
-| **GET** | `/session/<id>` | Retrieve chat history for a session. | *None* |
-
-### **3. Authentication** (`/auth`)
-
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| **POST** | `/verify` | Verifies Firebase ID token and creates user session. |
-
-### **4. Auxiliary Tools**
-*   **Medicine Decoder** (`/medicine`): Identify medicines and their usage.
-*   **Symptom Checker** (`/symptom-checker`): Analyze symptoms.
-*   **Medical Terms** (`/medical-term`): Definitions of complex terms.
-
----
-
-## ⚡ Installation & Setup
-
-### **Prerequisites**
-*   **Node.js** (v18+)
-*   **Python** (v3.8+)
-*   **Google Gemini API Key**
-*   **Firebase Project Credentials** (`serviceAccountKey.json`)
+### Prerequisites
+*   Node.js (v18+)
+*   Python (v3.8+)
+*   Google Gemini API Key
+*   Firebase Project Credentials (`serviceAccountKey.json`)
 
 ### **1. Clone the Repository**
 ```bash
 git clone https://github.com/Joshua16vinu/MedExplain.git
 cd MedExplain
-```
 
-### **2. Backend Setup**
+```
+---
+
+### 2. Backend Setup
+Navigate to the `Backend` directory and set up the Python environment.
+
 ```bash
 cd Backend
 
-# Create and activate virtual environment
+# Create a virtual environment
 python -m venv venv
-# Windows:
+
+# Activate the virtual environment
+# On Windows:
 venv\Scripts\activate
-# Mac/Linux:
+# On macOS/Linux:
 source venv/bin/activate
 
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-**Configuration**:
-Create a `.env` file in `Backend/` with:
-```env
-GEMINI_API_KEY=your_key_here
-PORT=8080
-```
-*Place your `serviceAccountKey.json` inside the `Backend/` folder.*
+**Configuration:**
+1.  Create a `.env` file in the `Backend` directory.
+2.  Add your API Key:
+    ```env
+    GEMINI_API_KEY=your_google_gemini_api_key
+    PORT=8080
+    ```
+3.  Place your Firebase `serviceAccountKey.json` file inside the `Backend/` directory.
 
-**Run Server**:
+**Start the Server:**
 ```bash
 python app.py
 ```
+The backend will run on `http://localhost:8080`.
 
-### **3. Frontend Setup**
+### 3. Frontend Setup
+Open a new terminal and navigate to the `frontend` directory.
+
 ```bash
 cd frontend
-
-# Install dependencies
 npm install
 
-# Start development server
+# Start the development server
 npm run dev
 ```
-Access the app at `http://localhost:5173`.
+The application will launch in your browser at `http://localhost:5173`.
 
 ---
 
-## ⚠️ Disclaimer
+##  Usage Guide
+
+1.  **Login/Register**: Create an account to save your report history.
+2.  **Upload**:
+    *   Go to the "Upload Report" tab.
+    *   Select your report type.
+    *   Choose your simplified language (English, Hindi, Marathi).
+    *   Drag & drop your PDF file.
+3.  **View Analysis**:
+    *   Review the **Insight Cards** for a quick health snapshot.
+    *   See numerical charts for key values.
+4.  **Compare Reports**:
+    *   Switch to the **"Compare Reports"** tab.
+    *   Select an old report on the left and a new report on the right.
+    *   View the **Clinical Comparison** to see if your health is Improving, Stable, or Worsening.
+    *   Check the **Trend Analysis Charts** to visually see the difference in values.
+5.  **Tools**:
+    *   Use the **Medicine Decoder** to identify pills.
+    *   Use the **Symptom Checker** for educational guidance.
+
+---
+
+## Disclaimer
 
 **MedExplain is an educational tool.**
 It uses Artificial Intelligence to explain medical data but **does NOT provide medical diagnoses**.
 *   Always consult a qualified doctor for medical advice.
 *   Do not make health decisions solely based on this application's output.
+*   **SOS**: In case of emergency, use the SOS button in the header to find helplines.
 
 ---
 
 **© 2026 MedExplain. Built by Blind Coders with ❤️**
+
+
+
+
