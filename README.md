@@ -4,7 +4,6 @@
 
 MedExplain is an advanced, AI-powered platform designed to demystify medical reports. By leveraging state-of-the-art Large Language Models (LLMs) and a unified, accessible design system, MedExplain transforms dense medical reports into clear, modular, visual, and actionable insights, making healthcare information accessible to everyone.
 
-![MedExplain Banner](https://via.placeholder.com/1200x400?text=MedExplain+Dashboard+Preview)
 
 ---
 
