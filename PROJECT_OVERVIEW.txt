@@ -1,0 +1,87 @@
+MEDEXPLAIN - PROJECT OVERVIEW & DOCUMENTATION
+===========================================
+
+1. PROJECT SUMMARY
+------------------
+MedExplain is an AI-powered application designed to help users understand their medical reports. It simplifies complex medical terminology into easy-to-understand summaries and provides an interactive chatbot for follow-up questions.
+
+2. FOLDER STRUCTURE
+-------------------
+The project is divided into two main parts: client-side (frontend) and server-side (Backend).
+
+Root/
+├── Backend/                 # Python Flask Server
+│   ├── app.py               # Application Entry Point
+│   ├── routes/              # API Endpoints (Blueprints)
+│   ├── services/            # Business Logic & AI Integration
+│   ├── middleware/          # Authentication & Security
+│   ├── storage/             # Temporary file storage
+│   └── utils/               # Helper functions
+│
+├── frontend/                # React Vite Application
+│   ├── src/
+│   │   ├── components/      # UI Building Blocks (Views, Widgets)
+│   │   ├── services/        # API Client Functions
+│   │   ├── utils/           # Helper scripts
+│   │   ├── App.jsx          # Main Router & Layout
+│   │   └── main.jsx         # React Entry Point
+│   └── public/              # Static Assets (Images, Icons)
+│
+└── .env                     # Environment Variables (Secrets)
+
+3. FUNCTIONALITIES
+------------------
+
+A. User Features (Non-Technical)
+--------------------------------
+1. **User Accounts**: Secure login and signup to keep your medical data private.
+2. **Upload Reports**: Easily upload photos or PDFs of medical reports (Blood tests, X-rays, etc.).
+3. **AI Summary**: Instantly receive a simplified, plain-English summary of your report.
+4. **Interactive Chatbot**: Ask questions about your report (e.g., "What does high cholesterol mean?") and get AI-driven answers based specifically on your data.
+5. **Compare Reports**: Select two different reports (e.g., tests from January vs. June) to see how your health metrics have changed.
+6. **Report History**: Access a library of all your previously uploaded reports.
+7. **Medical Guide**:
+   - **Body Guide**: Visual guide to understand health relative to body parts.
+   - **Symptom Checker**: Basic tools to check symptoms (functionality implied by codebase).
+   - **Medical Dictionary**: Explanations for complex terms.
+
+B. Technical Details
+--------------------
+**Tech Stack:**
+- **Frontend**: React.js (Vite), CSS (Vanilla/Custom)
+- **Backend**: Python (Flask)
+- **Database**: Firebase Firestore (NoSQL)
+- **Authentication**: Firebase Auth
+- **AI Model**: Google Gemini (via Backend Services)
+
+**Key Backend Routes (API Endpoints):**
+1. **Auth** (`/auth`): Handles user authentication.
+2. **Reports** (`/reports`):
+   - `POST /upload`: Accepts file uploads, performs OCR/Analysis, returns summary.
+   - `GET /`: Lists all reports for the logged-in user.
+   - `GET /summary`: Fetches the summary for a specific report.
+3. **Chatbot** (`/chatbot`):
+   - `POST /session`: Starts a new chat session for a report.
+   - `POST /message`: Sends a user message and returns an AI response.
+   - `GET /session/<id>`: Retrieves chat history.
+4. **Comparison** (`/reports/compare`): Analyzes differences between two report documents.
+5. **Voice Chat** (`/voice-chatbot`): Handles voice-based interactions.
+6. **Auxiliary**:
+   - `/symptom-checker`: Service for symptom analysis.
+   - `/medical-term`: Service for defining terms.
+   - `/medicine`: Service for medicine information.
+
+**Frontend Components:**
+- **UploadReport**: Drag-and-drop interface for files.
+- **SummaryView**: Renders the AI analysis (Markdown support).
+- **Chatbot**: Floating chat interface utilizing the backend chat API.
+- **ReportList**: Scrollable list of user's history.
+- **CompareReports**: UI for selecting and viewing comparisons.
+- **BodyGuide**: Interactive visual component.
+
+4. CURRENT STATUS
+-----------------
+- The application is fully structured with a separation of concerns directly between Frontend and Backend.
+- Core flows (Upload -> Analyze -> Chat) are implemented.
+- Comparison and History features are integrated.
+- Mobile responsiveness is being actively worked on (as per recent updates).
