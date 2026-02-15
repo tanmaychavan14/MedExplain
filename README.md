@@ -45,27 +45,27 @@ MedExplain follows a modern client-server architecture, leveraging the power of 
 
 ```mermaid
 graph TD
-    User[User Client] -->|HTTPS| Frontend[Frontend (React + Vite)]
+    User[User Client] -->|HTTPS| Frontend["Frontend (React + Vite)"]
     
     subgraph "Frontend Layer"
         Frontend -->|Routing| Router[React Router]
         Frontend -->|State| Context[Context API]
-        Frontend -->|API Calls| Axios[Axios/Fetch]
+        Frontend -->|API Calls| Axios["Axios/Fetch"]
     end
     
-    Frontend -->|REST API| Backend[Backend (Flask Python)]
+    Frontend -->|REST API| Backend["Backend (Flask Python)"]
     
     subgraph "Backend Layer"
         Backend -->|Auth Route| Auth[Auth Middleware]
         Backend -->|Report Logic| Process[Report Processor]
         Backend -->|Chat Logic| Chat[Chatbot Service]
         
-        Process -->|PDF/Image| OCR[PyMuPDF / OCR]
+        Process -->|PDF/Image| OCR["PyMuPDF / OCR"]
     end
     
     subgraph "Data & AI Services"
-        Backend -->|Store/Retrieve| Firebase[(Firebase Firestore)]
-        Backend -->|Generate Content| Gemini[Google Gemini 1.5 Flash]
+        Backend -->|Store/Retrieve| Firebase[("Firebase Firestore")]
+        Backend -->|Generate Content| Gemini["Google Gemini 1.5 Flash"]
     end
 ```
 
